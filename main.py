@@ -17,7 +17,7 @@ def dooray_webhook():
     return jsonify({"message": "데이터 수신 성공!", "received_data": response_message}), 200
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0")
 
 
 
