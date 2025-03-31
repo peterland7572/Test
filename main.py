@@ -7,23 +7,19 @@ def dooray_webhook():
     data = request.json  # JSON 데이터 파싱
     
     # 받은 텍스트(command)에 따라 처리
-    command_text = data.get("command", "").strip()
+    command = data.get("command", "").strip()
+    command_text = data.get("text", "").strip()  # 명령어 뒤에 입력된 텍스트
     
-    response_message = {}
-    
-    if command_text == "/jira":
-        response_message = {
-            "text": "Hello jira!",  # 응답 텍스트
-            "responseType": "ephemeral"  # 임시 메시지로 설정
-        }
-    
-    # JSON 형식으로 응답
-    return jsonify(response_message), 200
+     # 명령어가 "/jira"일 때 응답 메시지 설정
+    if command == "/jira":
+        response_message = f"you said '{command_text}'" if command_text else "you said nothing."
+
+        return jsonify({"message": response_message}), 200
+
+    return jsonify({"message": "Unknown command"}), 400
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
-
-
 
 
 '''
