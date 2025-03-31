@@ -1,34 +1,46 @@
 import logging
+import requests
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-# 📌 로그 설정
-logging.basicConfig(level=logging.INFO)  # INFO 레벨 이상 로그 출력
-logger = logging.getLogger(__name__)  # 로거 객체 생성
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 @app.route("/dooray-webhook", methods=["POST"])
 def dooray_webhook():
-    data = request.json  # JSON 데이터 파싱
-    logger.info("📥 Received Data: %s", data)  # 전체 데이터 로그 출력
-    
-    # 받은 텍스트(command)에 따라 처리
-    command = data.get("command", "").strip()
-    command_text = data.get("text", "").strip()  # 명령어 뒤에 입력된 텍스트
-    logger.info("🔍 Received command: %s | Text: %s", command, command_text)  # 로그 출력
+    data = request.json
+    logger.info("📥 Received Data: %s", data)
 
-    # 명령어가 "/jira"일 때 응답 메시지 설정
+    command = data.get("command", "").strip()
+    command_text = data.get("text", "").strip()
+    response_url = data.get("responseUrl")  # 🚀 비동기 응답 URL
+
     if command == "/jira":
         response_message = f"you said '{command_text}'" if command_text else "you said nothing."
-        logger.info("✅ Responding with: %s", response_message)  # 응답 확인
 
-        return jsonify({"message": response_message}), 200
+        # 🚀 Dooray가 인식할 수 있는 응답 포맷
+        response_data = {
+            "text": response_message,
+            "responseType": "ephemeral"  # ephemeral = 사용자에게만 보이는 응답
+        }
+
+        # 🚀 즉시 응답
+        logger.info("✅ Sending immediate response: %s", response_data)
+
+        # 🚀 비동기 응답 (responseUrl이 있는 경우 Dooray에 전송)
+        if response_url:
+            requests.post(response_url, json=response_data)
+            logger.info("✅ Sent async response to Dooray: %s", response_url)
+
+        return jsonify(response_data), 200
 
     logger.warning("❌ Unknown command received: %s", command)
-    return jsonify({"message": "Unknown command"}), 400
+    return jsonify({"text": "Unknown command", "responseType": "ephemeral"}), 400
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+
 
 
 
