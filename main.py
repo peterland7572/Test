@@ -5,21 +5,26 @@ app = Flask(__name__)
 @app.route("/dooray-webhook", methods=["POST"])
 def dooray_webhook():
     data = request.json  # JSON 데이터 파싱
+    print("📥 Received Data:", data)  # 전체 데이터 출력 (디버깅용)
     
     # 받은 텍스트(command)에 따라 처리
     command = data.get("command", "").strip()
     command_text = data.get("text", "").strip()  # 명령어 뒤에 입력된 텍스트
-    
-     # 명령어가 "/jira"일 때 응답 메시지 설정
+    print("🔍 Received command:", command, "| Text:", command_text)  # 콘솔 출력
+
+    # 명령어가 "/jira"일 때 응답 메시지 설정
     if command == "/jira":
         response_message = f"you said '{command_text}'" if command_text else "you said nothing."
+        print("✅ Responding with:", response_message)  # 응답 확인
 
         return jsonify({"message": response_message}), 200
 
+    print("❌ Unknown command received.")
     return jsonify({"message": "Unknown command"}), 400
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+    app.run(host="0.0.0.0", port=5000, debug=True)  # Debug 모드 ON
+
 
 
 '''
