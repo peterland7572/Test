@@ -38,7 +38,7 @@ def dooray_webhook():
 
         # 🚀 Dooray가 인식할 수 있는 응답 포맷
         response_data = {
-            "text": "[링크](http://www.daum.net) Why",
+            "text": "[조현웅/SGE 품질검증팀](http://www.daum.net) Why",
             "responseType": "inChannel"  # ephemeral = 사용자에게만 보이는 응답
         }
 
