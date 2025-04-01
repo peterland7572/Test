@@ -1,5 +1,6 @@
 import logging
 import requests
+import csv
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
@@ -7,38 +8,42 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# 🚀 실제 Dooray 사용자 ID로 변경해야 함
-MENTION_USERS = {
-    "조현웅": '[@조현웅/SGE 품질검증팀](dooray://3570973280734982045/members/3790034441950345057 "member")'
-}
+# 🚀 CSV 파일을 읽어와 슬래시 커맨드 매핑
+COMMANDS = {}
+
+def load_commands(csv_file="commands.csv"):
+    """CSV 파일에서 슬래시 커맨드와 응답 메시지를 읽어들임"""
+    global COMMANDS
+    COMMANDS.clear()  # 기존 데이터 초기화
+    try:
+        with open(csv_file, mode="r", encoding="utf-8") as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                command = row["command"].strip()
+                response_message = row["response_message"].strip()
+                COMMANDS[command] = response_message
+        logger.info("✅ CSV 파일 로드 완료: %s", COMMANDS)
+    except Exception as e:
+        logger.error("❌ CSV 파일을 읽는 중 오류 발생: %s", e)
+
+# 초기 실행 시 CSV 로드
+load_commands()
 
 @app.route("/dooray-webhook", methods=["POST"])
 def dooray_webhook():
+    """Dooray 슬래시 커맨드 처리"""
     data = request.json
     logger.info("📥 Received Data: %s", data)
 
     command = data.get("command", "").strip()
-    command_text = data.get("text", "").strip()
     response_url = data.get("responseUrl")  # 🚀 비동기 응답 URL
 
-    if command == "/일감":
-        response_message = (
-            "**지라 일감 요청드립니다.**\n\n"
-            "제목 :\n"
-            "내용 :\n"
-            "기간 :\n"
-            "담당자 :\n"
-            "기획서 :"
-             "\n"
-         "(dooray://3570973280734982045/members/3790034441950345057 \"member\")[@조현웅/SGE 품질검증팀]"  # 직접 문자열을 삽입
-             "\n"
-         "@조현웅/SGE 품질검증팀(dooray://3570973280734982045/members/3790034441950345057 \"member\")"  # 직접 문자열을 삽입
-             "\n"
-        )
+    if command in COMMANDS:
+        response_message = COMMANDS[command]  # CSV에서 불러온 응답 메시지
 
         # 🚀 Dooray가 인식할 수 있는 응답 포맷
         response_data = {
-            "text": "3790034441950345057-(dooray://3570973280734982045/members/3790034441950345057 \"member\")",
+            "text": response_message,
             "responseType": "inChannel"  # ephemeral = 사용자에게만 보이는 응답
         }
 
@@ -55,6 +60,5 @@ def dooray_webhook():
     logger.warning("❌ Unknown command received: %s", command)
     return jsonify({"text": "Unknown command", "responseType": "ephemeral"}), 400
 
-
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0")
