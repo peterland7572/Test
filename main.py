@@ -16,13 +16,21 @@ def dooray_webhook():
     command_text = data.get("text", "").strip()
     response_url = data.get("responseUrl")  # 🚀 비동기 응답 URL
 
-    if command == "/jira":
-        response_message = f"you said '{command_text}'" if command_text else "you said nothing."
+    if command == "/일감":
+        response_message = (
+            "@홍석기 @노승한 @김주현\n"
+            "**지라 일감 요청드립니다.**\n\n"
+            "제목 :\n"
+            "내용 :\n"
+            "기간 :\n"
+            "담당자 :\n"
+            "기획서 :"
+        )
 
         # 🚀 Dooray가 인식할 수 있는 응답 포맷
         response_data = {
             "text": response_message,
-            "responseType": "ephemeral"  # ephemeral = 사용자에게만 보이는 응답
+            "responseType": "inChannel"  # ephemeral = 사용자에게만 보이는 응답
         }
 
         # 🚀 즉시 응답
