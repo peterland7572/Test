@@ -33,7 +33,7 @@ def load_commands(csv_file="commands.csv"):
                 response_message = row.get("response_message", "").strip()
 
                 # 🔹 줄바꿈 문제 해결 (Markdown 인식)
-                response_message = response_message.replace("\n", "\n\n")
+                response_message = response_message.replace("\n", "\\n")
 
                 if command:
                     COMMANDS[command] = response_message
