@@ -5,24 +5,45 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
+# 로깅 설정
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# 🚀 CSV 파일을 읽어와 슬래시 커맨드 매핑
+# 명령어 매핑 딕셔너리
 COMMANDS = {}
 
 def load_commands(csv_file="commands.csv"):
     """CSV 파일에서 슬래시 커맨드와 응답 메시지를 읽어들임"""
     global COMMANDS
     COMMANDS.clear()  # 기존 데이터 초기화
+
     try:
         with open(csv_file, mode="r", encoding="utf-8-sig") as file:
             reader = csv.DictReader(file)
+
+            # 📌 CSV 컬럼(헤더) 로그 출력
+            if reader.fieldnames:
+                logger.info(f"📌 CSV 컬럼: {reader.fieldnames}")
+            else:
+                logger.error("❌ CSV 파일의 헤더가 없습니다.")
+                return
+
             for row in reader:
-                command = row["command"].strip()
-                response_message = row["response_message"].strip()
-                COMMANDS[command] = response_message
+                command = row.get("command", "").strip()
+                response_message = row.get("response_message", "").strip()
+
+                # 🔹 줄바꿈 문제 해결 (Markdown 인식)
+                response_message = response_message.replace("\n", "\n\n")
+
+                if command:
+                    COMMANDS[command] = response_message
+
         logger.info("✅ CSV 파일 로드 완료: %s", COMMANDS)
+
+    except FileNotFoundError:
+        logger.error("❌ CSV 파일을 찾을 수 없습니다: %s", csv_file)
+    except KeyError as e:
+        logger.error("❌ CSV 파일에 필요한 컬럼이 없습니다: %s", e)
     except Exception as e:
         logger.error("❌ CSV 파일을 읽는 중 오류 발생: %s", e)
 
