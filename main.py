@@ -27,7 +27,7 @@ def dooray_webhook():
 
     if command == "/일감":
         response_message = (
-            f"{MENTION_USERS['조현웅']} \n"
+            "{MENTION_USERS['조현웅']} \n"
             "**지라 일감 요청드립니다.**\n\n"
             "**제목** :\n"
             "**내용** :\n"
