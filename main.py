@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 # 🚀 실제 Dooray 사용자 ID로 변경해야 함
 MENTION_USERS = {
-    "조현웅1": "@{Peterland@smilegate.com}",
+    "조현웅1": "[@조현웅/SGE 품질검증팀](dooray://3570973280734982045/members/3790034441950345057 "member") ",
     "조현웅": "@{Peterland@smilegate.com}",
     "김주현": "@{jhyeonk@smilegate.com}"
 }
