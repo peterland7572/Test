@@ -16,7 +16,7 @@ def load_commands(csv_file="commands.csv"):
     global COMMANDS
     COMMANDS.clear()  # 기존 데이터 초기화
     try:
-        with open(csv_file, mode="r", encoding="utf-8") as file:
+        with open(csv_file, mode="r", encoding="utf-8-sig") as file:
             reader = csv.DictReader(file)
             for row in reader:
                 command = row["command"].strip()
