@@ -9,9 +9,7 @@ logger = logging.getLogger(__name__)
 
 # 🚀 실제 Dooray 사용자 ID로 변경해야 함
 MENTION_USERS = {
-    "조현웅1": "[@조현웅/SGE 품질검증팀](dooray://3570973280734982045/members/3790034441950345057 \"member\") ",
-    "조현웅": "[@조현웅/SGE 품질검증팀](dooray://3570973280734982045/members/3790034441950345057 \"member\") ",
-    "김주현": "[@조현웅/SGE 품질검증팀](dooray://3570973280734982045/members/3790034441950345057 \"member\") ",
+    "조현웅": '[@조현웅/SGE 품질검증팀](dooray://3570973280734982045/members/3790034441950345057 \"member\")'
 }
 
 @app.route("/dooray-webhook", methods=["POST"])
@@ -29,7 +27,7 @@ def dooray_webhook():
 
     if command == "/일감":
         response_message = (
-            f"{MENTION_USERS['조현웅1']} {MENTION_USERS['조현웅']} {MENTION_USERS['김주현']}\n"
+            f"{MENTION_USERS['조현웅']} \n"
             "**지라 일감 요청드립니다.**\n\n"
             "**제목** :\n"
             "**내용** :\n"
