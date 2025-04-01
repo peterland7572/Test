@@ -23,7 +23,8 @@ def dooray_webhook():
 
     if command == "/일감":
         response_message = (
-            f"{MENTION_USERS.get('조현웅', '')}\n"  # 직접 문자열을 삽입
+            '[@조현웅/SGE 품질검증팀](dooray://3570973280734982045/members/3790034441950345057 "member")'  # 직접 문자열을 삽입
+            "\n"
             "**지라 일감 요청드립니다.**\n\n"
             "제목 :\n"
             "내용 :\n"
