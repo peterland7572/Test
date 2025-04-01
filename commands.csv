@@ -1,4 +1,4 @@
 ﻿command,response_message
-/일감,"[@조현웅/SGE 품질검증팀](dooray://3570973280734982045/members/3790034441950345057 ""member"") 
+/일감,"[@조현웅/SGE 품질검증팀](dooray://3570973280734982045/members/3790034441950345057 \"member\") 
 **지라 일감 요청드립니다.**\n\n제목 :\n내용 :\n기간 :\n담당자 :\n기획서 :"
 /jira,jira hello
