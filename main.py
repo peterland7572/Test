@@ -49,6 +49,19 @@ def dooray_webhook():
             return jsonify({"responseType": "ephemeral", "text": "⚠️ 업무 입력 창을 여는 데 실패했습니다."}), 500
 
     elif command == "/jira":
+        message_data = {
+            "botName": "JiraBot",
+            "text": "📢 Jira 작업을 처리 중입니다...",
+            "responseType": "inChannel"
+        }
+
+        headers = {
+            "token": cmd_token,
+            "Content-Type": "application/json"
+        }
+
+        # Dooray 메시지 전송
+        response = requests.post(dooray_message_url, json=message_data, headers=headers)
         # `/jira` 명령어 처리
         return jsonify({"responseType": "ephemeral", "text": "Hello Jira"}), 200
 
