@@ -62,6 +62,8 @@ def interactive_webhook():
     channel_id = data.get("channel", {}).get("id")  # 수정: channel 객체에서 id 가져오기
     callback_id = data.get("callbackId")
     submission = data.get("submission", {})
+    cmd_token = data.get("cmdToken", "")
+
 
     # 로그 추가
     logger.debug("📌 Extracted tenantDomain: %s, channelId: %s", tenant_domain, channel_id)
@@ -100,8 +102,20 @@ def interactive_webhook():
                     f"📍 **기획서:** {document if document != '없음' else '없음'}"
         }
 
-        logger.info("✅ 업무 요청이 정상적으로 등록되었습니다: %s", response_data)
-        return jsonify({"responseType": "inChannel", "text": response_data}), 200
+        headers = {"token": cmd_token}
+        response = requests.post(dooray_dialog_url, json=response_data, headers=headers)
+
+        if response.status_code == 200:
+            logger.info("✅ 출력 성공")
+            return jsonify({"responseType": "inChannel", "text": response_data}), 200
+        else:
+            logger.error("❌ 출력 실패: %s", response.text)
+            return jsonify({"responseType": "ephemeral", "text": "⚠️ 업무 출력에  실패했습니다."}), 500
+
+
+
+        # logger.info("✅ 업무 요청이 정상적으로 등록되었습니다: %s", response_data)
+        #return jsonify({"responseType": "inChannel", "text": response_data}), 200
 
     else:
         logger.warning("⚠️ 알 수 없는 callbackId: %s", callback_id)
