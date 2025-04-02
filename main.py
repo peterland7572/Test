@@ -68,8 +68,8 @@ def interactive_webhook():
     logger.info("🌐resresponseUrl URL: %s", responseUrl)
 
     # 로그 추가
-    logger.debug("📌 Extracted tenantDomain: %s, channelId: %s", tenant_domain, channel_id)
-    logger.debug("🔄 Extracted callbackId: %s", callback_id)
+    logger.info("📌 Extracted tenantDomain: %s, channelId: %s", tenant_domain, channel_id)
+    logger.info("🔄 Extracted callbackId: %s", callback_id)
 
     # 필수 값 확인
     if not tenant_domain or not channel_id:
@@ -92,7 +92,7 @@ def interactive_webhook():
         document = submission.get("document", "없음")
 
         # 로그 추가
-        logger.debug("📝 Parsed Submission Data - Title: %s, Content: %s, Duration: %s, Document: %s",
+        logger.info("📝 Parsed Submission Data - Title: %s, Content: %s, Duration: %s, Document: %s",
                      title, content, duration, document)
 
         response_data = {
