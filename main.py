@@ -7,17 +7,20 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-DOORAY_DIALOG_URL = f"https://{tenant_domain}/messenger/api/channels/{channel_id}/dialogs"
-
 @app.route("/dooray-webhook", methods=["POST"])
 def dooray_webhook():
     """Dooray에서 받은 명령을 처리하는 엔드포인트"""
     data = request.json
     logger.info("📥 Received Data: %s", data)
-
+    
     command = data.get("command", "").strip()
     cmd_token = data.get("cmdToken", "")
     trigger_id = data.get("triggerId", "")
+    tenant_domain = data.get("tenantDomain")
+    channel_id = data.get("channelId")
+
+    DOORAY_DIALOG_URL = f"https://{tenant_domain}/messenger/api/channels/{channel_id}/dialogs"
+    
 
     if command == "/업무":
         dialog_data = {
