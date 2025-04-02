@@ -101,7 +101,7 @@ def interactive_webhook():
         }
 
         logger.info("✅ 업무 요청이 정상적으로 등록되었습니다: %s", response_data)
-        return jsonify(response_data), 200
+        return jsonify({"responseType": "inChannel", "text": response_data}), 200
 
     else:
         logger.warning("⚠️ 알 수 없는 callbackId: %s", callback_id)
