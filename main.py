@@ -106,7 +106,7 @@ def interactive_webhook():
 
         return jsonify({"responseType": "inChannel", "text": "✅ 메시지가 성공적으로 전송되었습니다!"}), 200
 
-'''
+        '''
         headers = {"token": cmd_token}
         response = requests.post(responseUrl, json=response_data, headers=headers)
 
@@ -116,7 +116,7 @@ def interactive_webhook():
         else:
             logger.error("❌ 메시지 전송 실패: %s", response.text)
             return jsonify({"responseType": "ephemeral", "text": "⚠️ 메시지 전송에 실패했습니다."}), 500
-'''
+        '''
 
 
         # logger.info("✅ 업무 요청이 정상적으로 등록되었습니다: %s", response_data)
