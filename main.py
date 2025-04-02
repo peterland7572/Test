@@ -19,7 +19,7 @@ def dooray_webhook():
     command = data.get("command", "").strip()
     cmd_token = data.get("cmdToken", "")
     trigger_id = data.get("triggerId", "")
-    dooray_dialog_url = f"https://{tenant_domain}/messenger/api/channels/{channel_id}/dialogs"
+    responseUrl =  data.get("triggerId", "")
     if command == "/일감":
         dialog_data = {
             "token": cmd_token,
@@ -38,8 +38,8 @@ def dooray_webhook():
             }
         }
 
-      #  headers = {"token": cmd_token}
-      #  response = requests.post(dooray_dialog_url, json=dialog_data, headers=headers)
+        headers = {"token": cmd_token}
+        response = requests.post(responseUrl, json=dialog_data, headers=headers)
 
         if response.status_code == 200:
             logger.info("✅ Dialog 생성 요청 성공")
