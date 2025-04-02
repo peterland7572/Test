@@ -57,6 +57,8 @@ def dooray_webhook():
 
 @app.route("/interactive-webhook", methods=["POST"])
 def interactive_webhook():
+    return jsonify({"responseType": "ephemeral", "text": "interactive_webhook"}), 200
+    
     """Dooray Interactive Message 요청을 처리하는 웹훅"""
     data = request.json
     logger.info("📥 Received Interactive Action: %s", data)
