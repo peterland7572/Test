@@ -91,8 +91,21 @@ def interactive_webhook():
     logger.info("📌 Extracted tenantDomain: %s, channelId: %s", tenant_domain, channel_id)
     logger.info("🔄 Extracted callbackId: %s", callback_id)
 
-    return jsonify({"responseType": "inChannel", "deleteOriginal": "true", "text": "✅ ✅ 응답이 성공적으로 전송되었습니다!"}), 200
+     message_data = {
+            "botName": "JiraBot",
+            "text": "📢 Jira 작업을 처리 중입니다...",
+            "responseType": "inChannel"
+        }
 
+    headers = {
+        "token": cmd_token,
+        "Content-Type": "application/json"
+    }
+
+    # Dooray 메시지 전송
+    response = requests.post(responseUrl, json=message_data, headers=headers)
+    # `/jira` 명령어 처리
+    return jsonify({"responseType": "ephemeral", "text": "interactive_webhook"}), 200
 
     
     # 필수 값 확인
