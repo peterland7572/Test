@@ -52,6 +52,7 @@ def dooray_webhook():
     elif command == "/jira":
         message_data = {
             "text": "📢 Jira 작업을 처리 중입니다...",
+            "triggerId": trigger_id,
             "replaceOriginal": "false",
             "responseType": "inChannel"
         }
@@ -60,8 +61,6 @@ def dooray_webhook():
             "token": cmd_token
         }
 
-
-        response_Url = f"https://{tenant_domain}/messenger/api/commands/hook/{cmd_token}"
 
         # Dooray 메시지 전송
         response = requests.post(response_Url, json=message_data, headers=headers)
