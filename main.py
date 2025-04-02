@@ -7,7 +7,7 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-
+orginResponseUrl = ""
 
 @app.route("/dooray-webhook", methods=["POST"])
 def dooray_webhook():
@@ -21,6 +21,8 @@ def dooray_webhook():
     trigger_id = data.get("triggerId", "")
     dooray_dialog_url = f"https://{tenant_domain}/messenger/api/channels/{channel_id}/dialogs"
     responseUrl = data.get("responseUrl", "")
+    orginResponseUrl = responseUrl
+    
     if command == "/일감":
         dialog_data = {
             "token": cmd_token,
@@ -147,9 +149,10 @@ def interactive_webhook():
                     f"📍 **기획서:** {document if document != '없음' else '없음'}"
         }
 
+        logger.info("🌐 orginResponseUrl URL: %s", orginResponseUrl)
         # Dooray 메신저로 응답 보내기
         headers = {"token": cmd_token}
-        response = requests.post(responseUrl, json=response_data, headers=headers)
+        response = requests.post(orginResponseUrl, json=response_data, headers=headers)
 
         if response.status_code == 200:
             return jsonify({"responseType": "inChannel", "text": "✅ 응답이 성공적으로 전송되었습니다!"}), 200
