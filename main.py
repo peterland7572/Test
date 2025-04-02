@@ -71,6 +71,10 @@ def interactive_webhook():
     logger.info("📌 Extracted tenantDomain: %s, channelId: %s", tenant_domain, channel_id)
     logger.info("🔄 Extracted callbackId: %s", callback_id)
 
+    return jsonify({"responseType": "inChannel", "text": "✅ ✅ 응답이 성공적으로 전송되었습니다!"}), 200
+
+
+    
     # 필수 값 확인
     if not tenant_domain or not channel_id:
         logger.error("❌ tenantDomain 또는 channelId 누락")
