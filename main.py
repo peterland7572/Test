@@ -48,6 +48,10 @@ def dooray_webhook():
             logger.error("❌ Dialog 생성 요청 실패: %s", response.text)
             return jsonify({"responseType": "ephemeral", "text": "⚠️ 업무 입력 창을 여는 데 실패했습니다."}), 500
 
+    elif command == "/jira":
+        # `/jira` 명령어 처리
+        return jsonify({"responseType": "ephemeral", "text": "Hello Jira"}), 200
+
     return jsonify({"text": "Unknown command", "responseType": "ephemeral"}), 400
 
 
