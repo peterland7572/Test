@@ -41,13 +41,15 @@ def dooray_webhook():
         #headers = {"token": cmd_token}
         #response = requests.post(responseUrl, json=dialog_data, headers=headers)
 
+        return jsonify({"responseType": "ephemeral", "text": dialog_data }), 200
+"""
         if response.status_code == 200:
             logger.info("✅ Dialog 생성 요청 성공")
             return jsonify({"responseType": "ephemeral", "text": dialog_data }), 200
         else:
             logger.error("❌ Dialog 생성 요청 실패: %s", response.text)
             return jsonify({"responseType": "ephemeral", "text": "⚠️ 업무 입력 창을 여는 데 실패했습니다."}), 500
-
+"""
     return jsonify({"text": "Unknown command", "responseType": "ephemeral"}), 400
 
 
