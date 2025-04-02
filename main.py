@@ -52,6 +52,7 @@ def dooray_webhook():
     elif command == "/jira":
         message_data = {
             "text": "📢 Jira 작업을 처리 중입니다...",
+            "channelId": channel_id,
             "triggerId": trigger_id,
             "replaceOriginal": "false",
             "responseType": "inChannel"
