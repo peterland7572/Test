@@ -19,7 +19,7 @@ def dooray_webhook():
     command = data.get("command", "").strip()
     cmd_token = data.get("cmdToken", "")
     trigger_id = data.get("triggerId", "")
-    responseUrl =  data.get("triggerId", "")
+    responseUrl =  data.get("responseUrl", "")
     if command == "/일감":
         dialog_data = {
             "token": cmd_token,
