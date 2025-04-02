@@ -65,7 +65,7 @@ def interactive_webhook():
     cmd_token = data.get("cmdToken", "")
     responseUrl = data.get("responseUrl", "")
 
-    logger.info("🌐resresponseUrl URL: %s", resresponseUrl)
+    logger.info("🌐resresponseUrl URL: %s", responseUrl)
 
     # 로그 추가
     logger.debug("📌 Extracted tenantDomain: %s, channelId: %s", tenant_domain, channel_id)
