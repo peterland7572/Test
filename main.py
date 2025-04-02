@@ -7,13 +7,15 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+dooray_dialog_url = f"https://{tenant_domain}/messenger/api/channels/{channel_id}/dialogs"
 
 @app.route("/dooray-webhook", methods=["POST"])
 def dooray_webhook():
     """Dooray에서 받은 명령을 처리하는 엔드포인트"""
     data = request.json
     logger.info("📥 Received Data: %s", data)
-
+    tenant_domain = data.get("tenantDomain")
+    channel_id = data.get("channelId")
     command = data.get("command", "").strip()
     cmd_token = data.get("cmdToken", "")
     trigger_id = data.get("triggerId", "")
@@ -62,8 +64,6 @@ def interactive_webhook():
         logger.error("❌ tenantDomain 또는 channelId 누락")
         return jsonify({"responseType": "ephemeral", "text": "⚠️ 잘못된 요청입니다. (tenantDomain 또는 channelId 없음)"}), 400
 
-    # Dooray 다이얼로그 URL 구성
-    dooray_dialog_url = f"https://{tenant_domain}/messenger/api/channels/{channel_id}/dialogs"
     logger.info("🌐 Dooray API URL: %s", dooray_dialog_url)
 
     callback_id = data.get("callbackId")
