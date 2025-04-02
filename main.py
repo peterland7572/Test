@@ -91,7 +91,7 @@ def interactive_webhook():
     logger.info("📌 Extracted tenantDomain: %s, channelId: %s", tenant_domain, channel_id)
     logger.info("🔄 Extracted callbackId: %s", callback_id)
 
-     message_data = {
+    message_data = {
             "botName": "JiraBot",
             "text": "📢 Jira 작업을 처리 중입니다...",
             "responseType": "inChannel"
