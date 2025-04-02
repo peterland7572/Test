@@ -20,6 +20,7 @@ def dooray_webhook():
     cmd_token = data.get("cmdToken", "")
     trigger_id = data.get("triggerId", "")
     dooray_dialog_url = f"https://{tenant_domain}/messenger/api/channels/{channel_id}/dialogs"
+    responseUrl = data.get("responseUrl", "")
     if command == "/일감":
         dialog_data = {
             "token": cmd_token,
@@ -61,7 +62,7 @@ def dooray_webhook():
         }
 
         # Dooray 메시지 전송
-        response = requests.post(dooray_message_url, json=message_data, headers=headers)
+        response = requests.post(responseUrl, json=message_data, headers=headers)
         # `/jira` 명령어 처리
         return jsonify({"responseType": "ephemeral", "text": "Hello Jira"}), 200
 
