@@ -50,7 +50,7 @@ def dooray_webhook():
 
         # 🚀 Dooray가 인식할 수 있는 응답 포맷
         response_data = {
-            "text": "[조현웅/SGE 품질검증팀](dooray://3570973280734982045/members/3790034441950345057 \"member\") created the vote!",
+            "text": "@[조현웅/SGE 품질검증팀](dooray://3570973280734982045/members/3790034441950345057 \"member\") created the vote!",
             "responseType": "inChannel"  # ephemeral = 사용자에게만 보이는 응답
         }
 
