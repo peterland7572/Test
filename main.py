@@ -63,7 +63,9 @@ def interactive_webhook():
     callback_id = data.get("callbackId")
     submission = data.get("submission", {})
     cmd_token = data.get("cmdToken", "")
+    resresponseUrl = data.get("responseUrl", "")
 
+    logger.info("🌐resresponseUrl URL: %s", resresponseUrl)
 
     # 로그 추가
     logger.debug("📌 Extracted tenantDomain: %s, channelId: %s", tenant_domain, channel_id)
@@ -103,7 +105,7 @@ def interactive_webhook():
         }
 
         headers = {"token": cmd_token}
-        response = requests.post(dooray_dialog_url, json=response_data, headers=headers)
+        response = requests.post(resresponseUrl, json=response_data, headers=headers)
 
         if response.status_code == 200:
             logger.info("✅ 출력 성공")
