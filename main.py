@@ -63,7 +63,7 @@ def interactive_webhook():
     callback_id = data.get("callbackId")
     submission = data.get("submission", {})
     cmd_token = data.get("cmdToken", "")
-    resresponseUrl = data.get("responseUrl", "")
+    responseUrl = data.get("responseUrl", "")
 
     logger.info("🌐resresponseUrl URL: %s", resresponseUrl)
 
@@ -104,26 +104,27 @@ def interactive_webhook():
                     f"📍 **기획서:** {document if document != '없음' else '없음'}"
         }
 
+        return jsonify({"responseType": "inChannel", "text": "✅ 메시지가 성공적으로 전송되었습니다!"}), 200
+
+'''
         headers = {"token": cmd_token}
-        response = requests.post(resresponseUrl, json=response_data, headers=headers)
+        response = requests.post(responseUrl, json=response_data, headers=headers)
 
         if response.status_code == 200:
-            logger.info("✅ 출력 성공")
-            return jsonify({"responseType": "inChannel", "text": response_data}), 200
+            logger.info("✅ 메시지 전송 성공")
+            return jsonify({"responseType": "inChannel", "text": "✅ 메시지가 성공적으로 전송되었습니다!"}), 200
         else:
-            logger.error("❌ 출력 실패: %s", response.text)
-            return jsonify({"responseType": "ephemeral", "text": "⚠️ 업무 출력에  실패했습니다."}), 500
-
+            logger.error("❌ 메시지 전송 실패: %s", response.text)
+            return jsonify({"responseType": "ephemeral", "text": "⚠️ 메시지 전송에 실패했습니다."}), 500
+'''
 
 
         # logger.info("✅ 업무 요청이 정상적으로 등록되었습니다: %s", response_data)
-        #return jsonify({"responseType": "inChannel", "text": response_data}), 200
+        # return jsonify({"responseType": "inChannel", "text": response_data}), 200
 
     else:
         logger.warning("⚠️ 알 수 없는 callbackId: %s", callback_id)
         return jsonify({"responseType": "ephemeral", "text": "⚠️ 처리할 수 없는 요청입니다."}), 400
-
-
 
 
 
