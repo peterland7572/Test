@@ -7,7 +7,7 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-DOORAY_DIALOG_URL = "https://{tenantDomain}/messenger/api/channels/{channelId}/dialogs"
+DOORAY_DIALOG_URL = f"https://{tenant_domain}/messenger/api/channels/{channel_id}/dialogs"
 
 @app.route("/dooray-webhook", methods=["POST"])
 def dooray_webhook():
