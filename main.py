@@ -57,12 +57,16 @@ def dooray_webhook():
         # 🚀 즉시 응답
         logger.info("✅ Sending immediate response: %s", response_data)
 
-        # 🚀 비동기 응답 (responseUrl이 있는 경우 Dooray에 전송)
-        if response_url:
-            requests.post(response_url, json=response_data)
-            logger.info("✅ Sent async response to Dooray: %s", response_url)
-
+        # 🚀 비동기 응답 코드 제거, 바로 응답을 반환
         return jsonify(response_data), 200
+        
+
+        # 🚀 비동기 응답 (responseUrl이 있는 경우 Dooray에 전송)
+        # if response_url:
+          #  requests.post(response_url, json=response_data)
+          #  logger.info("✅ Sent async response to Dooray: %s", response_url)
+
+       # return jsonify(response_data), 200
 
     logger.warning("❌ Unknown command received: %s", command)
     return jsonify({"text": "Unknown command", "responseType": "ephemeral"}), 400
