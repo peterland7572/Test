@@ -63,7 +63,7 @@ def dooray_webhook():
 
 
         # Dooray 메시지 전송
-        response = requests.post(response_Url, json=message_data, headers=headers)
+        response = requests.post(responseUrl, json=message_data, headers=headers)
         # `/jira` 명령어 처리
         if response.status_code == 200:
             logger.info("✅ Dooray 메시지 전송 성공")
