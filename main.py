@@ -65,7 +65,7 @@ def interactive_webhook():
     cmd_token = data.get("cmdToken", "")
     responseUrl = data.get("responseUrl", "")
 
-    logger.info("🌐resresponseUrl URL: %s", responseUrl)
+    logger.info("🌐responseUrl URL: %s", responseUrl)
 
     # 로그 추가
     logger.info("📌 Extracted tenantDomain: %s, channelId: %s", tenant_domain, channel_id)
@@ -103,6 +103,15 @@ def interactive_webhook():
                     f"📍 **기간:** {duration}\n"
                     f"📍 **기획서:** {document if document != '없음' else '없음'}"
         }
+
+        # Dooray 메신저로 응답 보내기
+        headers = {"Content-Type": "application/json"}
+        response = requests.post(responseUrl, json=response_data, headers=headers)
+
+        if response.status_code == 200:
+            return jsonify({"responseType": "inChannel", "text": "✅ 응답이 성공적으로 전송되었습니다!"}), 200
+        else:
+            return jsonify({"responseType": "ephemeral", "text": "❌ 응답 전송에 실패했습니다."}), 500
 
         return jsonify({"responseType": "inChannel", "text": "✅ 메시지가 성공적으로 전송되었습니다!"}), 200
 
