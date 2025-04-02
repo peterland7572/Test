@@ -105,10 +105,6 @@ def interactive_webhook():
 
     logger.info("🌐commandRequestUrl URL: %s", commandRequestUrl)
 
-    # 로그 추가
-    logger.info("📝 Parsed Submission Data - Title: %s, Content: %s, Duration: %s, Document: %s",
-                 title, content, duration, document)
-
     logger.info("🔹 Parsed Values:")
     logger.info("   - tenant_domain: %s", tenant_domain)
     logger.info("   - channel_id: %s", channel_id)
