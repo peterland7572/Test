@@ -54,7 +54,7 @@ def dooray_webhook():
             "text": "📢 Jira 작업을 처리 중입니다...",
             "channelId": channel_id,
             "triggerId": trigger_id,
-            "replaceOriginal": "false",
+            "replaceOriginal": "true",
             "responseType": "inChannel"
         }
 
