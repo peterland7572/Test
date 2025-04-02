@@ -45,7 +45,7 @@ def dooray_webhook():
     command = data.get("command", "").strip()
     response_url = data.get("responseUrl")  # 🚀 비동기 응답 URL
 
-    response_message = "[[@조현웅/SGE 품질검증팀]](dooray://3570973280734982045/members/3790034441950345057 "member")"
+    response_message = "[[@조현웅/SGE 품질검증팀]](dooray://3570973280734982045/members/3790034441950345057 \"member\")"
     if command in COMMANDS:
         response_message = COMMANDS[command]  # CSV에서 불러온 응답 메시지
 
