@@ -1,3 +1,4 @@
+import requests
 import logging
 from flask import Flask, request, jsonify
 
@@ -6,75 +7,92 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 @app.route("/dooray-webhook", methods=["POST"])
 def dooray_webhook():
+    """Dooray에서 받은 명령을 처리하는 엔드포인트"""
     data = request.json
     logger.info("📥 Received Data: %s", data)
 
     command = data.get("command", "").strip()
+    cmd_token = data.get("cmdToken", "")
+    trigger_id = data.get("triggerId", "")
 
-    if command == "/일감":
-        response_data = {
-            "responseType": "ephemeral",
-            "text": "📝 **새 업무 요청**",
-            "attachments": [
-                {
-                    "title": "📝 업무 요청서",
-                    "fields": [
-                        {"title": "제목", "value": " ", "short": False},
-                        {"title": "내용", "value": " ", "short": False},
-                        {"title": "기간", "value": " ", "short": True},
-                        {"title": "담당자", "value": " ", "short": True},
-                        {"title": "기획서", "value": " ", "short": False}
-                    ]
-                },
-                {
-                    "callbackId": "task_request",
-                    "actions": [
-                        {
-                            "name": "submit_task",
-                            "type": "button",
-                            "text": "Submit",
-                            "value": "업무 요청",
-                            "style": "primary"
-                        },
-                        {
-                            "name": "cancel_task",
-                            "type": "button",
-                            "text": "Cancel",
-                            "value": "cancel"
-                        }
-                    ]
-                }
-            ]
+    if command == "/업무":
+        dialog_data = {
+            "token": cmd_token,
+            "triggerId": trigger_id,
+            "callbackId": "work_task",
+            "dialog": {
+                "callbackId": "work_task",
+                "title": "📌 새 업무 등록",
+                "submitLabel": "등록",
+                "elements": [
+                    {"type": "text", "label": "제목", "name": "title", "optional": False},
+                    {"type": "textarea", "label": "내용", "name": "content", "optional": False},
+                    {"type": "text", "label": "기간", "name": "duration", "optional": False},
+                    {"type": "text", "label": "기획서 (URL)", "name": "document", "optional": True}
+                ]
+            }
         }
 
-        logger.info("✅ Sending interactive message: %s", response_data)
-        return jsonify(response_data), 200
+        headers = {"token": cmd_token}
+        response = requests.post(DOORAY_DIALOG_URL, json=dialog_data, headers=headers)
 
-    elif data.get("callbackId") == "task_request":
-        action_value = data.get("actionValue", "")
-        action_text = data.get("actionText", "")
+        if response.status_code == 200:
+            logger.info("✅ Dialog 생성 요청 성공")
+            return jsonify({"responseType": "ephemeral", "text": "📢 업무 입력 창을 열었습니다."}), 200
+        else:
+            logger.error("❌ Dialog 생성 요청 실패: %s", response.text)
+            return jsonify({"responseType": "ephemeral", "text": "⚠️ 업무 입력 창을 여는 데 실패했습니다."}), 500
 
-        if action_value == "업무 요청":
-            response_data = {
-                "responseType": "inChannel",
-                "text": f"✅ **업무 요청이 제출되었습니다!**\n\n"
-                        f"📌 *제목:* (사용자가 입력한 제목)\n"
-                        f"📌 *내용:* (사용자가 입력한 내용)\n"
-                        f"📌 *기간:* (사용자가 입력한 기간)\n"
-                        f"📌 *담당자:* (사용자가 입력한 담당자)\n"
-                        f"📌 *기획서:* (사용자가 입력한 기획서)"
-            }
-
-            logger.info("✅ 업무 요청이 정상적으로 처리되었습니다.")
-            return jsonify(response_data), 200
-
-        elif action_value == "cancel":
-            return jsonify({"responseType": "ephemeral", "text": "❌ 업무 요청이 취소되었습니다."}), 200
-
-    logger.warning("❌ Unknown command received: %s", command)
     return jsonify({"text": "Unknown command", "responseType": "ephemeral"}), 400
 
+
+@app.route("/interactive-webhook", methods=["POST"])
+def interactive_webhook():
+    """Dooray Interactive Message 요청을 처리하는 웹훅"""
+    data = request.json
+    logger.info("📥 Received Interactive Action: %s", data)
+
+    tenant_domain = data.get("tenantDomain")
+    channel_id = data.get("channelId")
+
+    if not tenant_domain or not channel_id:
+        logger.error("❌ tenantDomain 또는 channelId 누락")
+        return jsonify({"responseType": "ephemeral", "text": "⚠️ 잘못된 요청입니다. (tenantDomain 또는 channelId 없음)"}), 400
+
+    # Dooray 다이얼로그 URL 구성
+    dooray_dialog_url = f"https://{tenant_domain}/messenger/api/channels/{channel_id}/dialogs"
+    logger.info("🌐 Dooray API URL: %s", dooray_dialog_url)
+
+    callback_id = data.get("callbackId")
+
+    if callback_id == "work_task":
+        submission = data.get("submission", {})
+        title = submission.get("title", "제목 없음")
+        content = submission.get("content", "내용 없음")
+        duration = submission.get("duration", "미정")
+        document = submission.get("document", "없음")
+
+        response_data = {
+            "responseType": "inChannel",
+            "text": f"📌 **새 업무 요청이 등록되었습니다!**\n"
+                    f"📍 **제목:** {title}\n"
+                    f"📍 **내용:** {content}\n"
+                    f"📍 **기간:** {duration}\n"
+                    f"📍 **기획서:** {document if document != '없음' else '없음'}"
+        }
+
+        logger.info("✅ 업무 요청이 정상적으로 등록되었습니다: %s", response_data)
+        return jsonify(response_data), 200
+
+    else:
+        logger.warning("⚠️ 알 수 없는 callbackId: %s", callback_id)
+        return jsonify({"responseType": "ephemeral", "text": "⚠️ 처리할 수 없는 요청입니다."}), 400
+
+
+
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0")
