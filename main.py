@@ -13,7 +13,7 @@ def dooray_webhook():
 
     command = data.get("command", "").strip()
 
-    if command == "/업무":
+    if command == "/일감":
         response_data = {
             "responseType": "ephemeral",
             "text": "📝 **새 업무 요청**",
