@@ -105,8 +105,8 @@ def interactive_webhook():
         }
 
         # Dooray 메신저로 응답 보내기
-        headers = {"Content-Type": "application/json"}
-        response = requests.post(dooray_dialog_url, json=response_data, headers=headers)
+        headers = {"token": cmd_token}
+        response = requests.post(responseUrl, json=response_data, headers=headers)
 
         if response.status_code == 200:
             return jsonify({"responseType": "inChannel", "text": "✅ 응답이 성공적으로 전송되었습니다!"}), 200
