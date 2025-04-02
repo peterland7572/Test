@@ -58,8 +58,8 @@ def interactive_webhook():
     logger.info("📥 Received Interactive Action: %s", data)
 
     # 필수 데이터 추출
-    tenant_domain = data.get("tenantDomain")
-    channel_id = data.get("channelId")
+    tenant_domain = data.get("tenant", {}).get("domain")  # 수정: tenant 객체에서 domain 가져오기
+    channel_id = data.get("channel", {}).get("id")  # 수정: channel 객체에서 id 가져오기
     callback_id = data.get("callbackId")
     submission = data.get("submission", {})
 
