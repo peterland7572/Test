@@ -83,6 +83,7 @@ def interactive_webhook():
     submission = data.get("submission", {})
     cmd_token = data.get("cmdToken", "")
     responseUrl = data.get("responseUrl", "")
+    commandRequestUrl = data.get("commandRequestUrl", "")
 
     logger.info("🌐responseUrl URL: %s", responseUrl)
 
@@ -102,7 +103,7 @@ def interactive_webhook():
     }
 
     # Dooray 메시지 전송
-    response = requests.post(responseUrl, json=message_data, headers=headers)
+    response = requests.post(commandRequestUrl, json=message_data, headers=headers)
     # `/jira` 명령어 처리
     return jsonify({"responseType": "ephemeral", "text": "interactive_webhook"}), 200
 
