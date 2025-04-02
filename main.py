@@ -64,7 +64,12 @@ def dooray_webhook():
         # Dooray 메시지 전송
         response = requests.post(responseUrl, json=message_data, headers=headers)
         # `/jira` 명령어 처리
-        return jsonify({"responseType": "ephemeral", "text": "Hello Jira"}), 200
+        if response.status_code == 200:
+            logger.info("✅ Dooray 메시지 전송 성공")
+            return jsonify({"responseType": "ephemeral", "text": "✅ Jira 메시지가 전송되었습니다."}), 200
+        else:
+            logger.error("❌ Dooray 메시지 전송 실패: %s", response.text)
+            return jsonify({"responseType": "ephemeral", "text": "❌ Jira 메시지 전송에 실패했습니다."}), 500
 
     return jsonify({"text": "Unknown command", "responseType": "ephemeral"}), 400
 
@@ -85,7 +90,7 @@ def interactive_webhook():
     responseUrl = data.get("responseUrl", "")
     commandRequestUrl = data.get("commandRequestUrl", "")
 
-    logger.info("🌐responseUrl URL: %s", responseUrl)
+    logger.info("🌐commandRequestUrl URL: %s", commandRequestUrl)
 
     # 로그 추가
     logger.info("📌 Extracted tenantDomain: %s, channelId: %s", tenant_domain, channel_id)
