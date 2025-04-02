@@ -97,6 +97,7 @@ def interactive_webhook():
     tenant_domain = data.get("tenant", {}).get("domain")  # 수정: tenant 객체에서 domain 가져오기
     channel_id = data.get("channel", {}).get("id")  # 수정: channel 객체에서 id 가져오기
     callback_id = data.get("callbackId")
+    trigger_id = data.get("triggerId", "")
     submission = data.get("submission", {})
     cmd_token = data.get("cmdToken", "")
     responseUrl = data.get("responseUrl", "")
@@ -105,24 +106,18 @@ def interactive_webhook():
     logger.info("🌐commandRequestUrl URL: %s", commandRequestUrl)
 
     # 로그 추가
-    logger.info("📌 Extracted tenantDomain: %s, channelId: %s", tenant_domain, channel_id)
+    logger.info("📝 Parsed Submission Data - Title: %s, Content: %s, Duration: %s, Document: %s",
+                 title, content, duration, document)
+
+    logger.info("🔹 Parsed Values:")
+    logger.info("   - tenant_domain: %s", tenant_domain)
+    logger.info("   - channel_id: %s", channel_id)
+    logger.info("   - command: %s", command)
+    logger.info("   - cmd_token: %s", cmd_token)
+    logger.info("   - trigger_id: %s", trigger_id)
+    logger.info("   - responseUrl: %s", responseUrl)
+    # 로그 추가
     logger.info("🔄 Extracted callbackId: %s", callback_id)
-
-    message_data = {
-            "botName": "JiraBot",
-            "text": "📢 Jira 작업을 처리 중입니다...",
-            "responseType": "inChannel"
-        }
-
-    headers = {
-        "token": cmd_token,
-        "Content-Type": "application/json"
-    }
-
-    # Dooray 메시지 전송
-    response = requests.post(commandRequestUrl, json=message_data, headers=headers)
-    # `/jira` 명령어 처리
-    return jsonify({"responseType": "ephemeral", "text": "interactive_webhook"}), 200
 
     
     # 필수 값 확인
@@ -145,12 +140,10 @@ def interactive_webhook():
         duration = submission.get("duration", "미정")
         document = submission.get("document", "없음")
 
-        # 로그 추가
-        logger.info("📝 Parsed Submission Data - Title: %s, Content: %s, Duration: %s, Document: %s",
-                     title, content, duration, document)
-
         response_data = {
             "responseType": "inChannel",
+            "channelId": channel_id,
+            "triggerId": trigger_id,
             "text": f"📌 **새 업무 요청이 등록되었습니다!**\n"
                     f"📍 **제목:** {title}\n"
                     f"📍 **내용:** {content}\n"
