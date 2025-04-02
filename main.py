@@ -7,20 +7,19 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-
+DOORAY_DIALOG_URL = "https://{tenantDomain}/messenger/api/channels/{channelId}/dialogs"
 
 @app.route("/dooray-webhook", methods=["POST"])
 def dooray_webhook():
     """Dooray에서 받은 명령을 처리하는 엔드포인트"""
     data = request.json
     logger.info("📥 Received Data: %s", data)
-    tenant_domain = data.get("tenantDomain")
-    channel_id = data.get("channelId")
+
     command = data.get("command", "").strip()
     cmd_token = data.get("cmdToken", "")
     trigger_id = data.get("triggerId", "")
-    responseUrl =  data.get("responseUrl", "")
-    if command == "/일감":
+
+    if command == "/업무":
         dialog_data = {
             "token": cmd_token,
             "triggerId": trigger_id,
@@ -38,18 +37,16 @@ def dooray_webhook():
             }
         }
 
-        #headers = {"token": cmd_token}
-        #response = requests.post(responseUrl, json=dialog_data, headers=headers)
+        headers = {"token": cmd_token}
+        response = requests.post(DOORAY_DIALOG_URL, json=dialog_data, headers=headers)
 
-        return jsonify({"responseType": "ephemeral", "text": dialog_data }), 200
-"""
         if response.status_code == 200:
             logger.info("✅ Dialog 생성 요청 성공")
-            return jsonify({"responseType": "ephemeral", "text": dialog_data }), 200
+            return jsonify({"responseType": "ephemeral", "text": "📢 업무 입력 창을 열었습니다."}), 200
         else:
             logger.error("❌ Dialog 생성 요청 실패: %s", response.text)
             return jsonify({"responseType": "ephemeral", "text": "⚠️ 업무 입력 창을 여는 데 실패했습니다."}), 500
-"""
+
     return jsonify({"text": "Unknown command", "responseType": "ephemeral"}), 400
 
 
@@ -59,39 +56,25 @@ def interactive_webhook():
     data = request.json
     logger.info("📥 Received Interactive Action: %s", data)
 
-    # 필수 데이터 추출
     tenant_domain = data.get("tenantDomain")
     channel_id = data.get("channelId")
-    callback_id = data.get("callbackId")
-    submission = data.get("submission", {})
 
-    # 로그 추가
-    logger.debug("📌 Extracted tenantDomain: %s, channelId: %s", tenant_domain, channel_id)
-    logger.debug("🔄 Extracted callbackId: %s", callback_id)
-
-    # 필수 값 확인
     if not tenant_domain or not channel_id:
         logger.error("❌ tenantDomain 또는 channelId 누락")
         return jsonify({"responseType": "ephemeral", "text": "⚠️ 잘못된 요청입니다. (tenantDomain 또는 channelId 없음)"}), 400
 
-    # Dooray API URL 구성
+    # Dooray 다이얼로그 URL 구성
     dooray_dialog_url = f"https://{tenant_domain}/messenger/api/channels/{channel_id}/dialogs"
     logger.info("🌐 Dooray API URL: %s", dooray_dialog_url)
 
-    # 업무 등록 처리
-    if callback_id == "work_task":
-        if not submission:
-            logger.warning("⚠️ No submission data received: %s", submission)
-            return jsonify({"responseType": "ephemeral", "text": "⚠️ 입력된 데이터가 없습니다."}), 400
+    callback_id = data.get("callbackId")
 
+    if callback_id == "work_task":
+        submission = data.get("submission", {})
         title = submission.get("title", "제목 없음")
         content = submission.get("content", "내용 없음")
         duration = submission.get("duration", "미정")
         document = submission.get("document", "없음")
-
-        # 로그 추가
-        logger.debug("📝 Parsed Submission Data - Title: %s, Content: %s, Duration: %s, Document: %s",
-                     title, content, duration, document)
 
         response_data = {
             "responseType": "inChannel",
@@ -108,7 +91,6 @@ def interactive_webhook():
     else:
         logger.warning("⚠️ 알 수 없는 callbackId: %s", callback_id)
         return jsonify({"responseType": "ephemeral", "text": "⚠️ 처리할 수 없는 요청입니다."}), 400
-
 
 
 
