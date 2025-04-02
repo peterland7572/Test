@@ -57,8 +57,7 @@ def dooray_webhook():
         }
 
         headers = {
-            "token": cmd_token,
-            "Content-Type": "application/json"
+            "token": cmd_token
         }
 
         # Dooray 메시지 전송
