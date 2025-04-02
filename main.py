@@ -48,11 +48,6 @@ def dooray_webhook():
     response_message = "[[@조현웅/SGE 품질검증팀]](dooray://3570973280734982045/members/3790034441950345057 \"member\")"
     if command in COMMANDS:
       #  response_message = COMMANDS[command]  # CSV에서 불러온 응답 메시지
-        response_message = "'[@조현웅/SGE 품질검증팀'](dooray://3570973280734982045/members/3790034441950345057 \"member\")"
-
-         # 문자열 조작: [를 앞에 붙여주고, [와 ]를 적절하게 처리
-        response_message = response_message.replace("([", "[").replace("[", "[")
-        response_message = response_message.replace("]", "]")
         
         # 🚀 Dooray가 인식할 수 있는 응답 포맷
         response_data = {
