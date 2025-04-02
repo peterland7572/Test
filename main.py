@@ -22,6 +22,7 @@ def dooray_webhook():
     dooray_dialog_url = f"https://{tenant_domain}/messenger/api/channels/{channel_id}/dialogs"
     responseUrl = data.get("responseUrl", "")
     orginResponseUrl = responseUrl
+    logger.info("🌐 orginResponseUrl URL: %s", orginResponseUrl)
     
     if command == "/일감":
         dialog_data = {
