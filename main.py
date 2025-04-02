@@ -38,8 +38,8 @@ def dooray_webhook():
             }
         }
 
-        headers = {"token": cmd_token}
-        response = requests.post(dooray_dialog_url, json=dialog_data, headers=headers)
+      #  headers = {"token": cmd_token}
+      #  response = requests.post(dooray_dialog_url, json=dialog_data, headers=headers)
 
         if response.status_code == 200:
             logger.info("✅ Dialog 생성 요청 성공")
