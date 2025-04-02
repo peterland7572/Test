@@ -61,6 +61,16 @@ def dooray_webhook():
             "token": cmd_token
         }
 
+        logger.info("🔹 Parsed Values:")
+        logger.info("   - tenant_domain: %s", tenant_domain)
+        logger.info("   - channel_id: %s", channel_id)
+        logger.info("   - command: %s", command)
+        logger.info("   - cmd_token: %s", cmd_token)
+        logger.info("   - trigger_id: %s", trigger_id)
+        logger.info("   - responseUrl: %s", responseUrl)
+
+        logger.info("🔹 Sending Message Data: %s", message_data)
+        logger.info("🔹 Headers: %s", headers)
 
         # Dooray 메시지 전송
         response = requests.post(responseUrl, json=message_data, headers=headers)
