@@ -150,10 +150,10 @@ def interactive_webhook():
                     f"📍 **기획서:** {document if document != '없음' else '없음'}"
         }
 
-        logger.info("🌐 orginResponseUrl URL: %s", orginResponseUrl)
+        logger.info("🌐 commandRequestUrl URL: %s", commandRequestUrl)
         # Dooray 메신저로 응답 보내기
         headers = {"token": cmd_token}
-        response = requests.post(orginResponseUrl, json=response_data, headers=headers)
+        response = requests.post(commandRequestUrl, json=response_data, headers=headers)
 
         if response.status_code == 200:
             return jsonify({"responseType": "inChannel", "text": "✅ 응답이 성공적으로 전송되었습니다!"}), 200
