@@ -156,9 +156,9 @@ def interactive_webhook():
             "channelId": channel_id,
             "triggerId": trigger_id,
             "replaceOriginal": "false",
-            "text": f"[@함기범 /SGE 품질검증팀](dooray://3570973280734982045/members/3790036926003681981 \"member\") "
-                    f"(dooray://3570973279848255571/members/3790034441950345057 \"member\")   "
-                    f"\n"                                                                                                                                                                  
+            "text": f"(dooray://3570973279848255571/members/3571008351482084031 \"admin\") "  # [@홍석기C/SGE PM팀]
+                    f"(dooray://3570973279848255571/members/3571008626725314977 \"admin\") "  # [@노승한/SGE PM팀]
+                    f"(dooray://3570973279848255571/members/3898983631689925324 \"member\") \n" # [@김주현D/SGE PM팀]                                                                                                                                                                 
                     f" **지라 일감 요청드립니다.!**\n\n\n"
                     
                     f" 제목: {title}\n\n"
