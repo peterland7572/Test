@@ -57,6 +57,7 @@ def dooray_webhook():
             "triggerId": trigger_id,
             "replaceOriginal": "false",
             "responseType": "inChannel"
+            "tenantId": "3570973279848255571"
         }
 
         headers = {
