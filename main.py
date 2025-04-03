@@ -36,17 +36,7 @@ def dooray_webhook():
                     {"type": "text", "label": "기간", "name": "duration", "optional": False},
                     {"type": "text", "label": "기획서 (URL)", "name": "document", "optional": True},
                     {"type": "text", "label": "담당자 (Dooray ID)", "name": "assignee", "optional": False}  # 담당자 추가
-                ],
-                "attachments": [
-                {
-                    "imageUrl": [
-                        {
-                            "text": "외부 데이터",
-                            "dataSource": "external"
-                        }
-                    ]
-                }
-]
+                ]
             }
         }
 
@@ -55,7 +45,7 @@ def dooray_webhook():
 
         if response.status_code == 200:
             logger.info("✅ Dialog 생성 요청 성공")
-            return jsonify({"responseType": "inChannel", "text": "📢 업무 입력 창을 열었습니다."}), 200
+            return "", 200  # 아무 응답도 보내지 않음 (창이 조용히 닫힘)
         else:
             logger.error("❌ Dialog 생성 요청 실패: %s", response.text)
             return jsonify({"responseType": "ephemeral", "text": "⚠️ 업무 입력 창을 여는 데 실패했습니다."}), 500
