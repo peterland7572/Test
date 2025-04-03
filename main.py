@@ -154,11 +154,11 @@ def interactive_webhook():
             "channelId": channel_id,
             "triggerId": trigger_id,
             "replaceOriginal": "false",
-            "text": f"📌 **새 업무 요청이 등록되었습니다!**\n"
-                    f"📍 **제목:** {title}\n"
-                    f"📍 **내용:** {content}\n"
-                    f"📍 **기간:** {duration}\n"
-                    f"📍 **기획서:** {document if document != '없음' else '없음'}"
+            "text": f" **지라일감 요청드립니다.!**\n"
+                    f" **제목:** {title}\n"
+                    f" **내용:** {content}\n"
+                    f" **기간:** {duration}\n"
+                    f" **기획서:** {document if document != '없음' else '없음'}"
         }
         
         # Dooray 메신저로 응답 보내기
