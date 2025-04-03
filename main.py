@@ -94,6 +94,8 @@ def dooray_webhook():
 def interactive_webhook():
     
     """Dooray Interactive Message 요청을 처리하는 웹훅"""
+
+    logger.info("⚠️interactive_webhook(): 1 ⚠️")
     data = request.json
     logger.info("📥 Received Interactive Action: %s", data)
 
@@ -141,22 +143,13 @@ def interactive_webhook():
     # 로그 추가
     logger.info("🔄 Extracted callbackId: %s", callback_id)
 
-    
-    # 필수 값 확인
-    # if not tenant_domain or not channel_id:
-    #    logger.error("❌ tenantDomain 또는 channelId 누락")
-    #    return jsonify({"responseType": "ephemeral", "text": "⚠️ 잘못된 요청입니다. (tenantDomain 또는 channelId 없음)"}), 400
-
-    # Dooray API URL 구성
-    # dooray_dialog_url = f"https://{tenant_domain}/messenger/api/channels/{channel_id}/dialogs"
-    # logger.info("🌐 Dooray API URL: %s", dooray_dialog_url)
-
     # 업무 등록 처리
     if callback_id == "work_task":
         if not submission:
             logger.warning("⚠️ No submission data received: %s", submission)
+            logger.info("⚠️interactive_webhook(): 2 ⚠️")
             return jsonify({"responseType": "ephemeral", "text": "⚠️ 입력된 데이터가 없습니다."}), 400
-
+        logger.info("⚠️inside work_task ⚠️")
         title = submission.get("title", "제목 없음")
         content = submission.get("content", "내용 없음")
         duration = submission.get("duration", "미정")
@@ -176,6 +169,7 @@ def interactive_webhook():
         logger.info("🌐 orginResponseUrl URL: %s", orginResponseUrl)
         # Dooray 메신저로 응답 보내기
         headers = {"token": cmd_token}
+        logger.info("⚠️interactive_webhook(): 3 ⚠️")
         response = requests.post(orginResponseUrl, json=response_data, headers=headers)
 
         if response.status_code == 200:
@@ -203,6 +197,7 @@ def interactive_webhook():
         # return jsonify({"responseType": "inChannel", "text": response_data}), 200
 
     else:
+        logger.info("⚠️interactive_webhook(): 4 ⚠️")
         logger.warning("⚠️ 알 수 없는 callbackId: %s", callback_id)
         return jsonify({"responseType": "ephemeral", "text": "⚠️ 처리할 수 없는 요청입니다."}), 400
 
