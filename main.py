@@ -196,7 +196,7 @@ def interactive_webhook():
         jira_webhook_url = "https://projectg.dooray.com/services/3570973280734982045/4037981561969473608/QljyNHwGREyQJsAFbMFp7Q"
 
         jira_response = requests.post(jira_webhook_url, json=response_data,
-                                      headers={"Content-Type": "application/json"})
+                                      headers=headers)
 
         if jira_response.status_code == 200:
             logger.info("⚠️jira_response.status_code == 200: ⚠️")
