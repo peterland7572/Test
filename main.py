@@ -129,7 +129,7 @@ def interactive_webhook():
             logger.warning("⚠️ tenant_domain is missing in both 'tenantDomain' and 'tenant' object!")
 
 
-    logger.info("🌐commandRequestUrl URL: %s", commandRequestUrl)
+    logger.info("🌐orginResponseUrl  URL: %s", orginResponseUrl )
 
     logger.info("🔹 Parsed Values:")
     logger.info("   - tenant_domain: %s", tenant_domain)
@@ -173,10 +173,10 @@ def interactive_webhook():
                     f"📍 **기획서:** {document if document != '없음' else '없음'}"
         }
 
-        logger.info("🌐 responseUrl URL: %s", responseUrl)
+        logger.info("🌐 orginResponseUrl URL: %s", orginResponseUrl)
         # Dooray 메신저로 응답 보내기
         headers = {"token": cmd_token}
-        response = requests.post(responseUrl, json=response_data, headers=headers)
+        response = requests.post(orginResponseUrl, json=response_data, headers=headers)
 
         if response.status_code == 200:
             return jsonify({"responseType": "inChannel", "text": "✅ 응답이 성공적으로 전송되었습니다!"}), 200
