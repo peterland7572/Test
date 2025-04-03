@@ -56,7 +56,7 @@ def dooray_webhook():
             "channelId": channel_id,
             "triggerId": trigger_id,
             "replaceOriginal": "false",
-            "responseType": "inChannel"
+            "responseType": "inChannel",
             "tenantId": "3570973279848255571"
         }
 
