@@ -82,10 +82,12 @@ def dooray_webhook():
         # `/jira` 명령어 처리
         if response.status_code == 200:
             logger.info("✅ Dooray 메시지 전송 성공")
-            return jsonify({"responseType": "ephemeral", "text": "(dooray://3570973280734982045/members/3790034441950345057 \"member\")" "✅ Jira 메시지가 전송되었습니다."}), 200
+            return 200
+            # return jsonify({"responseType": "ephemeral", "text": "(dooray://3570973280734982045/members/3790034441950345057 \"member\")" "✅ Jira 메시지가 전송되었습니다."}), 200
         else:
             logger.error("❌ Dooray 메시지 전송 실패: %s", response.text)
-            return jsonify({"responseType": "ephemeral", "text": "❌ Jira 메시지 전송에 실패했습니다."}), 500
+            # return jsonify({"responseType": "ephemeral", "text": "❌ Jira 메시지 전송에 실패했습니다."}), 500
+            return 500
 
     return jsonify({"text": "Unknown command", "responseType": "ephemeral"}), 400
 
