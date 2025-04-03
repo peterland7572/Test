@@ -107,6 +107,10 @@ def interactive_webhook():
     responseUrl = data.get("responseUrl", "")
     commandRequestUrl = data.get("commandRequestUrl", "")
 
+    if not tenant_domain or not channel_id:
+        tenant_domain = data.get("tenant", {}).get("domain")  # 수정: tenant 객체에서 domain 가져오기
+        channel_id = data.get("channel", {}).get("id")  # 수정: channel 객체에서 id 가져오기
+
     logger.info("🌐commandRequestUrl URL: %s", commandRequestUrl)
 
     logger.info("🔹 Parsed Values:")
