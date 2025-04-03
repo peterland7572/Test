@@ -36,7 +36,7 @@ def dooray_webhook():
                     {"type": "text", "label": "기간", "name": "duration", "optional": False},
                     {"type": "text", "label": "기획서 (URL)", "name": "document", "optional": True},
                     {"type": "text", "label": "담당자 (Dooray ID)", "name": "assignee", "optional": False},  # 담당자 추가
-                    {"type": "select","label": "담당자 (Dooray ID)", "name": "test", "dataSource": "users", "optional": False}  # 담당자 추가
+                    {"type": "select","label": "담당자 (Dooray ID)", "name": "test", "dataSource": "external", "optional": False}  # 담당자 추가
                 ]
             }
         }
@@ -95,8 +95,6 @@ def dooray_webhook():
                             "text": "❌ Jira 메시지 전송에 실패했습니다."}), 500
 
       
-
-
         
         # `/jira` 명령어 처리
         if response.status_code == 200:
@@ -171,7 +169,6 @@ def interactive_webhook():
         duration = submission.get("duration", "미정")
         document = submission.get("document", "없음")
         assignee = submission.get("assignee", "미정")  # 담당자 추가
-        test = submission.get("test", "미정")  # 담당자 추가
 
         response_data = {
             "responseType": "inChannel",
@@ -188,7 +185,6 @@ def interactive_webhook():
                     f" 기간: {duration}\n\n"
                     f" 담당자: {assignee}\n\n"
                     f" 기획서: {document if document != '없음' else '없음'}"
-                    f" 기획서: {test}"
         }
 
         # Dooray 메신저로 응답 보내기
