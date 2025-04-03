@@ -58,7 +58,7 @@ def dooray_webhook():
         "text": "HI Jira"
         }
 
-        jira_response = requests.post(jira_webhook_url, json=jira_message_data,
+        jira_response = requests.post(responseUrl, json=jira_message_data,
                                       headers={"Content-Type": "application/json"})
 
         if  jira_response.status_code == 200:
