@@ -51,6 +51,24 @@ def dooray_webhook():
             return jsonify({"responseType": "ephemeral", "text": "⚠️ 업무 입력 창을 여는 데 실패했습니다."}), 500
 
     elif command == "/jira":
+
+        jira_webhook_url = "https://projectg.dooray.com/services/3570973280734982045/4037981561969473608/QljyNHwGREyQJsAFbMFp7Q"
+
+        jira_message_data = {
+        "text": "HI Jira"
+        }
+
+        jira_response = requests.post(jira_webhook_url, json=jira_message_data,
+                                      headers={"Content-Type": "application/json"})
+
+        if  jira_response.status_code == 200:
+            logger.info("✅ Dooray 및 Jira 메시지 전송 성공")
+        else:
+            logger.error("❌ Jira 메시지 전송 실패: %s", jira_response.text)
+            return jsonify({"responseType": "inChannel", "replaceOriginal": "false",
+                            "text": "❌ Jira 메시지 전송에 실패했습니다."}), 500
+
+        
         message_data = {
             "text": "📢 Jira 작업을 처리 중입니다...!",
             "channelId": channel_id,
