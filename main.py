@@ -39,10 +39,8 @@ def dooray_webhook():
                 ],
                 "attachments": [
                 {
-                    "actions": [
+                    "imageUrl": [
                         {
-                            "type": "select",
-                            "name": "sel_external",
                             "text": "외부 데이터",
                             "dataSource": "external"
                         }
