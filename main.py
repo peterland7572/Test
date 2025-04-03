@@ -26,7 +26,7 @@ def dooray_webhook():
             "token": cmd_token,
             "triggerId": trigger_id,
             "callbackId": "work_task",
-            "dataSource": "external"
+            "dataSource": "external",
             "dialog": {
                 "callbackId": "work_task",
                 "title": "📌 새 업무 등록",
