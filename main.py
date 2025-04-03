@@ -161,51 +161,51 @@ def interactive_webhook():
 
     # 업무 등록 처리
     if callback_id == "work_task":
-        if not submission:
-            logger.info("⚠️interactive_webhook(): 2 ⚠️")
-            return jsonify({"responseType": "ephemeral", "text": "⚠️ 입력된 데이터가 없습니다."}), 400
-        logger.info("⚠️inside work_task ⚠️")
-        title = submission.get("title", "제목 없음")
-        content = submission.get("content", "내용 없음")
-        duration = submission.get("duration", "미정")
-        document = submission.get("document", "없음")
-        assignee = submission.get("assignee", "미정")  # 담당자 추가
+    if not submission:
+        return jsonify({"responseType": "ephemeral", "text": "⚠️ 입력된 데이터가 없습니다."}), 400
 
-        response_data = {
-            "responseType": "inChannel",
-            "channelId": channel_id,
-            "triggerId": trigger_id,
-            "replaceOriginal": "false",
-            "text": f"(dooray://3570973279848255571/members/3571008351482084031 \"admin\") "  # [@홍석기C/SGE PM팀]
-                    f"(dooray://3570973279848255571/members/3571008626725314977 \"admin\") "  # [@노승한/SGE PM팀]
-                    f"(dooray://3570973279848255571/members/3898983631689925324 \"member\") \n" # [@김주현D/SGE PM팀]                                                                                                                                                                 
-                    f" **지라 일감 요청드립니다.!**\n\n\n"
-                    
-                    f" 제목: {title}\n\n"
-                    f" 내용: {content}\n\n"
-                    f" 기간: {duration}\n\n"
-                    f" 담당자: {assignee}\n\n"
-                    f" 기획서: {document if document != '없음' else '없음'}"
-        }
+    title = submission.get("title", "제목 없음")
+    content = submission.get("content", "내용 없음")
+    duration = submission.get("duration", "미정")
+    document = submission.get("document", "없음")
+    assignee = submission.get("assignee", "미정")  # 담당자 추가
 
-        # Dooray 메신저로 응답 보내기
-        headers = {"token": cmd_token}
-        logger.info("⚠️interactive_webhook(): 3 ⚠️")
-        response = requests.post(responseUrl, json=response_data, headers=headers)
+    # 📢 1. Dooray 메시지 전송
+    response_data = {
+        "responseType": "inChannel",
+        "channelId": channel_id,
+        "triggerId": trigger_id,
+        "replaceOriginal": "false",
+        "text": (
+            "<@3571008351482084031|admin> "
+            "<@3571008626725314977|admin> "
+            "<@3898983631689925324|member>\n"
+            "**지라 일감 요청드립니다.!**\n\n\n"
+            f"📌 **제목**: {title}\n"
+            f"📄 **내용**: {content}\n"
+            f"⏳ **기간**: {duration}\n"
+            f"👤 **담당자**: {assignee}\n"
+            f"📎 **기획서**: {document if document != '없음' else '없음'}"
+        )
+    }
 
-        if response.status_code == 200:
-            logger.info("⚠️response.status_code == 200: ⚠️")
-            return jsonify({"response": "inChannel", "text": "✅ 응답이 성공적으로 전송되었습니다!"}), 200
-        else:
-            logger.error("❌ 메시지 전송 실패: %s", response.text)
-            return jsonify({"response": "ephemeral", "text": "❌ 응답 전송에 실패했습니다."}), 500
+    headers = {"token": cmd_token, "Content-Type": "application/json"}
+    dooray_response = requests.post(responseUrl, json=response_data, headers=headers)
 
-        logger.info("⚠️interactive_webhook(): 4 ⚠️")
-        return jsonify({"response": "inChannel", "text": "✅ 메시지가 성공적으로 전송되었습니다!"}), 200
+    # 📢 2. Jira Webhook 메시지 전송
+    jira_webhook_url = "https://projectg.dooray.com/services/3570973280734982045/4037981561969473608/QljyNHwGREyQJsAFbMFp7Q"
+    jira_message_data = {"text": f"📌 Jira Task 요청\n\n📄 {title}\n\n{content}"}
+    jira_response = requests.post(jira_webhook_url, json=jira_message_data,
+                                  headers={"Content-Type": "application/json"})
 
+    # 📢 3. 응답 확인 및 결과 반환
+    if dooray_response.status_code == 200 and jira_response.status_code == 200:
+        logger.info("✅ Dooray 및 Jira 메시지 전송 성공")
+        return jsonify({"response": "inChannel", "text": "✅ Jira 요청이 성공적으로 전송되었습니다!"}), 200
     else:
-        logger.info("⚠️interactive_webhook(): 5 ⚠️")
-        return jsonify({"responseType": "ephemeral", "text": "⚠️ 처리할 수 없는 요청입니다."}), 400
+        logger.error("❌ 메시지 전송 실패 - Dooray: %s", dooray_response.text)
+        logger.error("❌ 메시지 전송 실패 - Jira: %s", jira_response.text)
+        return jsonify({"response": "ephemeral", "text": "❌ Jira 요청 전송에 실패했습니다."}), 500
 
 
 if __name__ == "__main__":
