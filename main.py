@@ -20,7 +20,6 @@ def dooray_webhook():
     trigger_id = data.get("triggerId", "")
     dooray_dialog_url = f"https://{tenant_domain}/messenger/api/channels/{channel_id}/dialogs"
     responseUrl = data.get("responseUrl", "")
-    logger.info("🌐 orginResponseUrl URL: %s", orginResponseUrl)
     
     if command == "/일감":
         dialog_data = {
