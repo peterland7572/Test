@@ -143,13 +143,13 @@ def interactive_webhook():
 
     
     # 필수 값 확인
-    if not tenant_domain or not channel_id:
-        logger.error("❌ tenantDomain 또는 channelId 누락")
-        return jsonify({"responseType": "ephemeral", "text": "⚠️ 잘못된 요청입니다. (tenantDomain 또는 channelId 없음)"}), 400
+    # if not tenant_domain or not channel_id:
+    #    logger.error("❌ tenantDomain 또는 channelId 누락")
+    #    return jsonify({"responseType": "ephemeral", "text": "⚠️ 잘못된 요청입니다. (tenantDomain 또는 channelId 없음)"}), 400
 
     # Dooray API URL 구성
-    dooray_dialog_url = f"https://{tenant_domain}/messenger/api/channels/{channel_id}/dialogs"
-    logger.info("🌐 Dooray API URL: %s", dooray_dialog_url)
+    # dooray_dialog_url = f"https://{tenant_domain}/messenger/api/channels/{channel_id}/dialogs"
+    # logger.info("🌐 Dooray API URL: %s", dooray_dialog_url)
 
     # 업무 등록 처리
     if callback_id == "work_task":
