@@ -52,7 +52,6 @@ def dooray_webhook():
 
     elif command == "/jira":
 
-  
         message_data = {
             "text": "📢 Jira 작업을 처리 중입니다...!",
             "channelId": channel_id,
@@ -86,17 +85,13 @@ def dooray_webhook():
         jira_response = requests.post(jira_webhook_url, json=message_data,
                                       headers={"Content-Type": "application/json"})
 
-        if  jira_response.status_code == 200:
+        if jira_response.status_code == 200:
             logger.info("✅ Dooray 및 Jira 메시지 전송 성공")
         else:
             logger.error("❌ Jira 메시지 전송 실패: %s", jira_response.text)
             return jsonify({"responseType": "inChannel", "replaceOriginal": "false",
                             "text": "❌ Jira 메시지 전송에 실패했습니다."}), 500
 
-      
-
-
-        
         # `/jira` 명령어 처리
         if response.status_code == 200:
             logger.info("✅ Dooray 메시지 전송 성공")
@@ -161,8 +156,8 @@ def interactive_webhook():
 
     # 업무 등록 처리
     if callback_id == "work_task":
-    if not submission:
-        return jsonify({"responseType": "ephemeral", "text": "⚠️ 입력된 데이터가 없습니다."}), 400
+        if not submission:
+            return jsonify({"responseType": "ephemeral", "text": "⚠️ 입력된 데이터가 없습니다."}), 400
 
     title = submission.get("title", "제목 없음")
     content = submission.get("content", "내용 없음")
