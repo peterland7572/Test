@@ -22,7 +22,6 @@ def dooray_webhook():
     responseUrl = data.get("responseUrl", "")
 
     if command == "/일감":
-        jsonify({"responseType": "inChannel", "text": "일감을 요청합니다."}), 200
         dialog_data = {
             "token": cmd_token,
             "triggerId": trigger_id,
