@@ -171,6 +171,7 @@ def interactive_webhook():
         duration = submission.get("duration", "미정")
         document = submission.get("document", "없음")
         assignee = submission.get("assignee", "미정")  # 담당자 추가
+        test = submission.get("test", "미정")  # 담당자 추가
 
         response_data = {
             "responseType": "inChannel",
@@ -187,6 +188,7 @@ def interactive_webhook():
                     f" 기간: {duration}\n\n"
                     f" 담당자: {assignee}\n\n"
                     f" 기획서: {document if document != '없음' else '없음'}"
+                    f" 기획서: {test}"
         }
 
         # Dooray 메신저로 응답 보내기
