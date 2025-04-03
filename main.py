@@ -26,11 +26,11 @@ def dooray_webhook():
             "token": cmd_token,
             "triggerId": trigger_id,
             "callbackId": "work_task",
-            "dataSource": "external",
             "dialog": {
                 "callbackId": "work_task",
-                "title": "📌 새 업무 등록",
+                "title": "  새 업무 등록",
                 "submitLabel": "등록",
+                "dataSource" : "external",
                 "elements": [
                     {"type": "text", "label": "제목", "name": "title", "optional": False},
                     {"type": "textarea", "label": "내용", "name": "content", "optional": False},
