@@ -108,9 +108,26 @@ def interactive_webhook():
     responseUrl = data.get("responseUrl", "")
     commandRequestUrl = data.get("commandRequestUrl", "")
 
-    if not tenant_domain or not channel_id:
-        tenant_domain = data.get("tenant", {}).get("domain")  # 수정: tenant 객체에서 domain 가져오기
-        channel_id = data.get("channel", {}).get("id")  # 수정: channel 객체에서 id 가져오기
+    # 만약 channel_id가 없으면, 다른 경로에서 가져오기
+    if not channel_id:
+        channel = data.get("channel")
+        if channel:
+            channel_id = channel.get("id")
+            logger.info("📌 Found channel_id in 'channel' object: %s", channel_id)
+        else:
+            logger.warning("⚠️ channel_id is missing in both 'channelId' and 'channel' object!")
+    
+    logger.info("🔹 Final channel_id: %s", channel_id)
+
+    # 만약 tenant_domain이 없으면, 다른 경로에서 가져오기
+    if not tenant_domain:
+        tenant = data.get("tenant")
+        if tenant:
+            tenant_domain = tenant.get("domain")
+            logger.info("📌 Found tenant_domain in 'tenant' object: %s", tenant_domain)
+        else:
+            logger.warning("⚠️ tenant_domain is missing in both 'tenantDomain' and 'tenant' object!")
+
 
     logger.info("🌐commandRequestUrl URL: %s", commandRequestUrl)
 
