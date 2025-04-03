@@ -176,9 +176,9 @@ def interactive_webhook():
             "channelId": channel_id,
             "triggerId": trigger_id,
             "replaceOriginal": "false",
-            "text": f"(dooray://3570973279848255571/members/3571008351482084031 \\\"admin\\\") "  # [@홍석기C/SGE PM팀]
-                    f"(dooray://3570973279848255571/members/3571008626725314977 \\\"admin\\\") "  # [@노승한/SGE PM팀]
-                    f"(dooray://3570973279848255571/members/3898983631689925324 \\\"member\\\") \n" # [@김주현D/SGE PM팀]                                                                                                                                                                 
+            "text": f"(dooray://3570973279848255571/members/3571008351482084031 \"admin") "  # [@홍석기C/SGE PM팀]
+                    f"(dooray://3570973279848255571/members/3571008626725314977 \"admin\") "  # [@노승한/SGE PM팀]
+                    f"(dooray://3570973279848255571/members/3898983631689925324 \"member\") \n" # [@김주현D/SGE PM팀]                                                                                                                                                                 
                     f" **지라 일감 요청드립니다.!**\n\n\n"
                     
                     f" 제목: {title}\n\n"
@@ -191,21 +191,17 @@ def interactive_webhook():
         # Dooray 메신저로 응답 보내기
         headers = {"token": cmd_token}
         logger.info("⚠️interactive_webhook(): 3 ⚠️")
-        # response = requests.post(responseUrl, json=response_data, headers=headers)
+        response = requests.post(responseUrl, json=response_data, headers=headers)
 
-        jira_webhook_url = "https://projectg.dooray.com/services/3570973280734982045/4037981561969473608/QljyNHwGREyQJsAFbMFp7Q"
-
-        jira_response = requests.post(jira_webhook_url, json=response_data, headers=headers)
-
-        if jira_response.status_code == 200:
-            logger.info("⚠️jira_response.status_code == 200: ⚠️")
-            return jsonify({"jira_response": "inChannel", "text": "✅ 응답이 성공적으로 전송되었습니다!"}), 200
+        if response.status_code == 200:
+            logger.info("⚠️response.status_code == 200: ⚠️")
+            return jsonify({"response": "inChannel", "text": "✅ 응답이 성공적으로 전송되었습니다!"}), 200
         else:
             logger.error("❌ 메시지 전송 실패: %s", response.text)
-            return jsonify({"jira_response": "ephemeral", "text": "❌ 응답 전송에 실패했습니다."}), 500
+            return jsonify({"response": "ephemeral", "text": "❌ 응답 전송에 실패했습니다."}), 500
 
         logger.info("⚠️interactive_webhook(): 4 ⚠️")
-        return jsonify({"jira_response": "inChannel", "text": "✅ 메시지가 성공적으로 전송되었습니다!"}), 200
+        return jsonify({"response": "inChannel", "text": "✅ 메시지가 성공적으로 전송되었습니다!"}), 200
 
     else:
         logger.info("⚠️interactive_webhook(): 5 ⚠️")
