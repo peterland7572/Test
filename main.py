@@ -83,7 +83,7 @@ def dooray_webhook():
 
         jira_webhook_url = "https://projectg.dooray.com/services/3570973280734982045/4037981561969473608/QljyNHwGREyQJsAFbMFp7Q"
 
-        jira_response = requests.post(responseUrl, json=message_data,
+        jira_response = requests.post(jira_webhook_url, json=message_data,
                                       headers={"Content-Type": "application/json"})
 
         if  jira_response.status_code == 200:
