@@ -35,8 +35,8 @@ def dooray_webhook():
                     {"type": "textarea", "label": "내용", "name": "content", "optional": False},
                     {"type": "text", "label": "기간", "name": "duration", "optional": False},
                     {"type": "text", "label": "기획서 (URL)", "name": "document", "optional": True},
-                    {"type": "text", "label": "담당자 (Dooray ID)", "name": "assignee", "optional": False}  # 담당자 추가
-                    {"type": "select","label": "담당자 (Dooray ID)", "name": "test","dataSource" : "external", "optional": False}  # 담당자 추가
+                    {"type": "text", "label": "담당자 (Dooray ID)", "name": "assignee", "optional": False},  # 담당자 추가
+                    {"type": "select","label": "담당자 (Dooray ID)", "name": "test", "dataSource": "external", "optional": False}  # 담당자 추가
                 ]
             }
         }
