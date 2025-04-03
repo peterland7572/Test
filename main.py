@@ -157,7 +157,7 @@ def interactive_webhook():
             "triggerId": trigger_id,
             "replaceOriginal": "false",
             "text": f"[@함기범 /SGE 품질검증팀](dooray://3570973280734982045/members/3790036926003681981 \"member\") "
-                    f"[@조현웅/SGE 품질검증팀](dooray://3570973280734982045/members/3790034441950345057 \"member\")   "
+                    f"(dooray://3570973279848255571/members/3790034441950345057 \"member\")   "
                     f"\n"                                                                                                                                                                  
                     f" **지라 일감 요청드립니다.!**\n\n\n"
                     
