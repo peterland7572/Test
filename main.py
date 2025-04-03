@@ -42,7 +42,7 @@ def dooray_webhook():
             }
         }
 
-        headers = {"token": cmd_token}
+        headers = {"token": cmd_token, "Content-Type": "application/json"}
         response = requests.post(dooray_dialog_url, json=dialog_data, headers=headers)
 
         if response.status_code == 200:
@@ -62,7 +62,8 @@ def dooray_webhook():
         }
 
         headers = {
-            "token": cmd_token
+            "token": cmd_token,
+            "Content-Type": "application/json"
         }
 
         logger.info("🔹 Parsed Values:")
