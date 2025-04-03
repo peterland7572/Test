@@ -176,9 +176,9 @@ def interactive_webhook():
             "channelId": channel_id,
             "triggerId": trigger_id,
             "replaceOriginal": "false",
-            "text": f"(dooray://3570973279848255571/members/3571008351482084031 \"admin\") "  # [@홍석기C/SGE PM팀]
-                    f"(dooray://3570973279848255571/members/3571008626725314977 \"admin\") "  # [@노승한/SGE PM팀]
-                    f"(dooray://3570973279848255571/members/3898983631689925324 \"member\") \n" # [@김주현D/SGE PM팀]                                                                                                                                                                 
+            "text": f"(dooray://3570973279848255571/members/3571008351482084031 \\\"admin\\\") "  # [@홍석기C/SGE PM팀]
+                    f"(dooray://3570973279848255571/members/3571008626725314977 \\\"admin\\\") "  # [@노승한/SGE PM팀]
+                    f"(dooray://3570973279848255571/members/3898983631689925324 \\\"member\\\") \n" # [@김주현D/SGE PM팀]                                                                                                                                                                 
                     f" **지라 일감 요청드립니다.!**\n\n\n"
                     
                     f" 제목: {title}\n\n"
@@ -196,7 +196,7 @@ def interactive_webhook():
         jira_webhook_url = "https://projectg.dooray.com/services/3570973280734982045/4037981561969473608/QljyNHwGREyQJsAFbMFp7Q"
 
         jira_response = requests.post(jira_webhook_url, json=response_data,
-                                      headers=headers)
+                                      headers={"Content-Type": "application/json"})
 
         if jira_response.status_code == 200:
             logger.info("⚠️jira_response.status_code == 200: ⚠️")
