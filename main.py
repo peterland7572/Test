@@ -158,14 +158,14 @@ def interactive_webhook():
             "replaceOriginal": "false",
             "text": f"[@함기범 /SGE 품질검증팀](dooray://3570973280734982045/members/3790036926003681981 \"member\") "
                     f"[@조현웅/SGE 품질검증팀](dooray://3570973280734982045/members/3790034441950345057 \"member\")   "
-                    f"n"                                                                                                                                                                  
+                    f"\n"                                                                                                                                                                  
                     f" **지라 일감 요청드립니다.!**\n\n\n"
                     
-                    f" **제목:** {title}\n\n"
-                    f" **내용:** {content}\n\n"
-                    f" **기간:** {duration}\n\n"
-                    f" **담당자:** {assignee}\n\n"
-                    f" **기획서:** {document if document != '없음' else '없음'}"
+                    f" 제목: {title}\n\n"
+                    f" 내용: {content}\n\n"
+                    f" 기간: {duration}\n\n"
+                    f" 담당자: {assignee}\n\n"
+                    f" 기획서: {document if document != '없음' else '없음'}"
         }
 
         # Dooray 메신저로 응답 보내기
