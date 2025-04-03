@@ -191,13 +191,17 @@ def interactive_webhook():
         # Dooray 메신저로 응답 보내기
         headers = {"token": cmd_token}
         logger.info("⚠️interactive_webhook(): 3 ⚠️")
-        response = requests.post(responseUrl, json=response_data, headers=headers)
+        # response = requests.post(responseUrl, json=response_data, headers=headers)
 
-        if response.status_code == 200:
-            logger.info("⚠️response.status_code == 200: ⚠️")
+        jira_webhook_url = "https://projectg.dooray.com/services/3570973280734982045/4037981561969473608/QljyNHwGREyQJsAFbMFp7Q"
+        jira_response = requests.post(jira_webhook_url, json=response_data,
+                                      headers={"Content-Type": "application/json"})
+
+        if jira_response.status_code == 200:
+            logger.info("⚠️jira_response.status_code == 200: ⚠️")
             return jsonify({"responseType": "inChannel", "text": "✅ 응답이 성공적으로 전송되었습니다!"}), 200
         else:
-            logger.error("❌ 메시지 전송 실패: %s", response.text)
+            logger.error("❌ 메시지 전송 실패: %s", jira_response.text)
             return jsonify({"responseType": "ephemeral", "text": "❌ 응답 전송에 실패했습니다."}), 500
 
         logger.info("⚠️interactive_webhook(): 4 ⚠️")
