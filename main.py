@@ -179,6 +179,8 @@ def interactive_webhook():
         logger.warning("⚠️ Unrecognized callback_id: %s", callback_id)
         return jsonify({"responseType": "ephemeral", "text": "⚠️ 처리할 수 없는 요청입니다."}), 400
 
+    logger.info("⚠️⚠️⚠️- jira_webhook_url: %s", jira_webhook_url)
+
     # 업무 등록 처리
     if callback_id in jira_webhook_urls:
         if not submission:
