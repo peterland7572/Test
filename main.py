@@ -38,8 +38,13 @@ def dooray_webhook():
         "/테스트일감": "test_task",
     }
 
-    logger.info("📌 Received command: %s", command)
-    logger.info("📌 Mapped callbackId: %s", callback_ids[command])
+    # ✅ Heartbeat 커맨드 추가
+    if command == "/heartbeat":
+        logger.info("💓 Heartbeat 요청 수신됨")
+        return jsonify({"status": "alive"}), 200
+        
+    # logger.info("📌 Received command: %s", command)
+    # logger.info("📌 Mapped callbackId: %s", callback_ids[command])
 
     if command in callback_ids:
         dialog_data = {
