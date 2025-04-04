@@ -30,6 +30,7 @@ def dooray_webhook():
                 "callbackId": "work_task",
                 "title": "  새 업무 등록",
                 "submitLabel": "등록",
+                "testUrl": "https://www.daum.net", # test URL
                 "elements": [
                     {"type": "text", "label": "제목", "name": "title", "optional": False},
                     {"type": "textarea", "label": "내용", "name": "content", "optional": False},
@@ -125,8 +126,13 @@ def interactive_webhook():
     submission = data.get("submission", {})
     cmd_token = data.get("cmdToken", "")
     responseUrl = data.get("responseUrl", "")
+    testUrl = data.get("testUrl", "")
     commandRequestUrl = data.get("commandRequestUrl", "")
 
+    # test URL
+    logger.info("🔹 Final testUrl: %s", testUrl)
+
+    
     # 만약 channel_id가 없으면, 다른 경로에서 가져오기
     if not channel_id:
         channel = data.get("channel")
