@@ -208,20 +208,36 @@ def interactive_webhook():
         document = submission.get("document", "없음")
         assignee = submission.get("assignee", "미정")  # 담당자 추가
 
+         # callback_id에 따른 제목 접두어 설정
+        title_prefix = {
+            "server_task": "서버-",
+            "ta_task": "TA-",
+            "client_task": "클라-",
+            "planning_task": "기획-",
+            "qa_task": "품질-",
+            "character_task": "캐릭터-",
+            "background_task": "배경-",
+            "concept_task": "컨셉-",
+            "animation_task": "애니-",
+            "effect_task": "이펙트-",
+            "art_task": "아트-",
+            "test_task": "테스트-",
+        }.get(callback_id, "")
+
         response_data = {
             "responseType": "inChannel",
             "channelId": channel_id,
             "triggerId": trigger_id,
             "replaceOriginal": "false",
-            "text": f"[@홍석기C/SGE PM팀](dooray://3570973279848255571/members/3571008351482084031 \"admin\") "  # [@홍석기C/SGE PM팀]
-                    f"[@노승한/SGE PM팀](dooray://3570973279848255571/members/3571008626725314977 \"admin\") "  # [@노승한/SGE PM팀]
-                    f"[@김주현D/SGE PM팀](dooray://3570973279848255571/members/3898983631689925324 \"member\") \n" # [@김주현D/SGE PM팀]   
-                    f"**지라 일감 요청드립니다.!**\n\n"
-                    f" 제목: \n\t\t{title}\n\n"
-                    f" 내용: \n\t\t{content}\n\n"
-                    f" 기간: \n\t\t{duration}\n\n"
-                    f" 담당자: \n\t\t{assignee}\n\n"
-                    f" 기획서: \n\t\t{document if document != '없음' else '없음'}"
+            "text": f"[@홍석기C/SGE PM팀](dooray://3570973279848255571/members/3571008351482084031 \"admin\") "  
+                    f"[@노승한/SGE PM팀](dooray://3570973279848255571/members/3571008626725314977 \"admin\") " 
+                    f"[@김주현D/SGE PM팀](dooray://3570973279848255571/members/3898983631689925324 \"member\") \n"
+                    f"**지라 일감 요청드립니다.!**\n"
+                    f" 제목: {title_prefix}{title}\n"
+                    f" 내용: {content}\n" 
+                    f" 기간: {duration}\n" 
+                    f" 담당자: {assignee}\n" 
+                    f" 기획서: {document if document != '없음' else '없음'}"
         }
 
         # Dooray 메신저로 응답 보내기
