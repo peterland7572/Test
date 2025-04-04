@@ -179,11 +179,11 @@ def interactive_webhook():
                     f"[@김주현D/SGE PM팀](dooray://3570973280734982045/members/3898983631689925324 \"member\") \n" # [@김주현D/SGE PM팀]                                                                                                                                                                 
                     f" **지라 일감 요청드립니다.!**\n\n\n"
                     
-                    f" 제목: {title}\n\n"
-                    f" 내용: {content}\n\n"
-                    f" 기간: {duration}\n\n"
-                    f" 담당자: {assignee}\n\n"
-                    f" 기획서: {document if document != '없음' else '없음'}"
+                    f" 제목: \n\t{title}\n\n"
+                    f" 내용: \n\t{content}\n\n"
+                    f" 기간: \n\t{duration}\n\n"
+                    f" 담당자: \n\t{assignee}\n\n"
+                    f" 기획서: \n\t{document if document != '없음' else '없음'}"
         }
 
         # Dooray 메신저로 응답 보내기
