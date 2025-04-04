@@ -220,7 +220,7 @@ def interactive_webhook():
             "concept_task": "컨셉-",
             "animation_task": "애니-",
             "effect_task": "이펙트-",
-            "art_task": "아트-",
+            "art_task": "UI-",
             "test_task": "테스트-",
         }.get(callback_id, "")
 
