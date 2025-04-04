@@ -63,18 +63,18 @@ def dooray_webhook():
         headers = {"token": cmd_token, "Content-Type": "application/json"}
         response = requests.post(dooray_dialog_url, json=dialog_data, headers=headers)
 
-        logger.info("⚠️⚠️⚠️- dialog_data: %s", dialog_data) # 
+        #logger.info("⚠️⚠️⚠️- dialog_data: %s", dialog_data) # 
         # 최종적으로 설정된 callbackId 값을 다시 확인하는 로그
-        logger.info("📌 Final dialog_data.callbackId: %s", dialog_data["callbackId"])
-        logger.info("📌 Final dialog_data.dialog.callbackId: %s", dialog_data["dialog"]["callbackId"])
+        # logger.info("📌 Final dialog_data.callbackId: %s", dialog_data["callbackId"])
+        # logger.info("📌 Final dialog_data.dialog.callbackId: %s", dialog_data["dialog"]["callbackId"])
 
 
         if response.status_code == 200:
             logger.info(f"✅ Dialog 생성 요청 성공 ({command})")
-            return "", 200  # 아무 응답도 보내지 않음 (창이 조용히 닫힘)
+            return jsonify({"responseType": "ephemeral", "text": "업무 요청이 성공적으로 전송되었습니다!"}), 200
         else:
             logger.error(f"❌ Dialog 생성 요청 실패 ({command}): {response.text}")
-            return jsonify({"responseType": "ephemeral", "text": "⚠️ 업무 입력 창을 여는 데 실패했습니다."}), 500
+            return jsonify({"responseType": "ephemeral", "text": "업무 요청이 전송이 실패했습니다."}), 500
 
     elif command == "/jira":
         message_data = {
