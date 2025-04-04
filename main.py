@@ -38,6 +38,9 @@ def dooray_webhook():
         "/테스트일감": "test_task",
     }
 
+    logger.info("📌 Received command: %s", command)
+    logger.info("📌 Mapped callbackId: %s", callback_ids[command])
+
     if command in callback_ids:
         dialog_data = {
             "token": cmd_token,
@@ -59,6 +62,12 @@ def dooray_webhook():
 
         headers = {"token": cmd_token, "Content-Type": "application/json"}
         response = requests.post(dooray_dialog_url, json=dialog_data, headers=headers)
+
+        logger.info("⚠️⚠️⚠️- dialog_data: %s", dialog_data) # 
+        # 최종적으로 설정된 callbackId 값을 다시 확인하는 로그
+        logger.info("📌 Final dialog_data.callbackId: %s", dialog_data["callbackId"])
+        logger.info("📌 Final dialog_data.dialog.callbackId: %s", dialog_data["dialog"]["callbackId"])
+
 
         if response.status_code == 200:
             logger.info(f"✅ Dialog 생성 요청 성공 ({command})")
