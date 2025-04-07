@@ -221,7 +221,7 @@ def interactive_webhook():
             "background_task": "배경-",
             "concept_task": "컨셉-",
             "animation_task": "애니-",
-            "effect_task": "이펙트-",
+            "effect_task": "VFX-",
             "art_task": "UI-",
             "test_task": "테스트-",
             "ui_task": "UI-",
