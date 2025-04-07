@@ -122,7 +122,7 @@ def dooray_webhook():
 
     return jsonify({"text": "Unknown command", "responseType": "ephemeral"}), 400
 
-
+# request URL = Webserveraddurl + /interactive-webhook
 @app.route("/interactive-webhook", methods=["POST"])
 def interactive_webhook():
     """Dooray Interactive Message 요청을 처리하는 웹훅"""
@@ -184,8 +184,8 @@ def interactive_webhook():
         "art_task": "https://projectg.dooray.com/services/3570973280734982045/4038472628237942380/7_dU3COwRUaIOPF02WokmA",
         "server_task": "https://projectg.dooray.com/services/3570973280734982045/4038473828248998749/ZfjTPl4yTLC6Z-qf7dqfYg",
         "ta_task": "https://projectg.dooray.com/services/3570973280734982045/4038474691102299050/GtqG3T4ZQPqmE12IOhypPQ",
-        "test_task": "https://projectg.dooray.com/services/3570973280734982045/4037981561969473608/QljyNHwGREyQJsAFbMFp7Q"
-        "ui_task": "https://projectg.dooray.com/services/3570973280734982045/4040776735936393535/RWVwpEfTSVaDscwM0mIa2A"
+        "test_task": "https://projectg.dooray.com/services/3570973280734982045/4037981561969473608/QljyNHwGREyQJsAFbMFp7Q",
+        "ui_task": "https://projectg.dooray.com/services/3570973280734982045/4040776735936393535/RWVwpEfTSVaDscwM0mIa2A",
     }
 
     # callbackId가 존재할 경우 해당 URL 할당
