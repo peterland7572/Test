@@ -36,6 +36,7 @@ def dooray_webhook():
         "/서버일감": "server_task",
         "/TA일감": "ta_task",
         "/테스트일감": "test_task",
+        "/UI일감": "ui_task",
     }
 
     # ✅ Heartbeat 커맨드 추가
@@ -184,6 +185,7 @@ def interactive_webhook():
         "server_task": "https://projectg.dooray.com/services/3570973280734982045/4038473828248998749/ZfjTPl4yTLC6Z-qf7dqfYg",
         "ta_task": "https://projectg.dooray.com/services/3570973280734982045/4038474691102299050/GtqG3T4ZQPqmE12IOhypPQ",
         "test_task": "https://projectg.dooray.com/services/3570973280734982045/4037981561969473608/QljyNHwGREyQJsAFbMFp7Q"
+        "ui_task": "https://projectg.dooray.com/services/3570973280734982045/4040776735936393535/RWVwpEfTSVaDscwM0mIa2A"
     }
 
     # callbackId가 존재할 경우 해당 URL 할당
@@ -222,6 +224,7 @@ def interactive_webhook():
             "effect_task": "이펙트-",
             "art_task": "UI-",
             "test_task": "테스트-",
+            "ui_task": "UI-",
         }.get(callback_id, "")
 
         response_data = {
@@ -232,7 +235,7 @@ def interactive_webhook():
             "text": f"[@홍석기C/SGE PM팀](dooray://3570973279848255571/members/3571008351482084031 \"admin\") "  
                     f"[@노승한/SGE PM팀](dooray://3570973279848255571/members/3571008626725314977 \"admin\") " 
                     f"[@김주현D/SGE PM팀](dooray://3570973279848255571/members/3898983631689925324 \"member\") \n"
-                    f"**지라 일감 요청드립니다.!**\n"
+                    f"**지라 일감 요청드립니다!**\n"
                     f" 제목: {title_prefix}{title}\n"
                     f" 내용: {content}\n" 
                     f" 기간: {duration}\n" 
