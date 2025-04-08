@@ -527,7 +527,7 @@ def interactive_webhook2():
         "channelId": channel_id,
         "triggerId": trigger_id,
         "replaceOriginal": "false",
-        "text": f"**[기획 검토 요청]**\n"
+        "text": f"**[기획 리뷰 요청드립니다.]**\n"
                 f"제목: << {title} >>\n"
                 f"기획서: {document if document != '없음' else '없음'}\n"
                 f"내용: {content}\n"
@@ -537,8 +537,11 @@ def interactive_webhook2():
                 f"[@김주현D/SGE PM팀](dooray://3570973279848255571/members/3898983631689925324 \"member\") \n"
         # [@김주현D/SGE PM팀]
     }
+    #기획서 리뷰방
+    #webhook_url = "https://projectg.dooray.com/services/3570973280734982045/4041534465982137794/rHV6ZWAeSuCnMRko9whNWg"
+    #테스트방(jira-task)
+    webhook_url = "https://projectg.dooray.com/services/3570973280734982045/3610800952977075788/x_lzKe7VSrOUHBWhkO4xRA"
     
-    webhook_url = "https://projectg.dooray.com/services/3570973280734982045/4041534465982137794/rHV6ZWAeSuCnMRko9whNWg"
     headers = {"Content-Type": "application/json"}
 
     response = requests.post(webhook_url, json=response_data, headers=headers)
