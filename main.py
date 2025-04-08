@@ -540,7 +540,7 @@ def interactive_webhook2():
     #기획서 리뷰방
     #webhook_url = "https://projectg.dooray.com/services/3570973280734982045/4041534465982137794/rHV6ZWAeSuCnMRko9whNWg"
     #테스트방(jira-task)
-    webhook_url = "https://projectg.dooray.com/services/3570973280734982045/3610800952977075788/x_lzKe7VSrOUHBWhkO4xRA"
+    webhook_url = "https://projectg.dooray.com/services/3570973280734982045/4041752041730033522/0MRxm-OGSsuVzsgm0IEI3A"
     
     headers = {"Content-Type": "application/json"}
 
