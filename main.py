@@ -451,10 +451,18 @@ def interactive_webhook():
                 "responseType": "inChannel",
                 "text": "✅ *Dooray Webhook 테스트 메시지 전송 성공!* \n테스트용 메시지입니다.",
             }
+
+            # webhook_url과 jira_webhook_url 비교
             
+            if webhook_url == jira_webhook_url:
+                logger.info("🔁 webhook_url과 jira_webhook_url이 동일합니다.")
+            else:
+                logger.info("❗ webhook_url과 jira_webhook_url이 다릅니다.")
+                logger.info(f"   webhook_url: {webhook_url}")
+                logger.info(f"   jira_webhook_url: {jira_webhook_url}")
             
             # 요청 전송
-            response = requests.post(webhook_url, data=json.dumps(payload), headers=headers)
+            response = requests.post(jira_webhook_url, data=json.dumps(payload), headers=headers)
             
             # 결과 로그 출력
             logger.info(f"Status Code: {response.status_code}")
