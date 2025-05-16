@@ -433,26 +433,7 @@ def interactive_webhook():
                     f" 기획서: {document if document != '없음' else '없음'}"
         }
 
-        # Dooray 메신저로 응답 보내기
-        headers = {"Content-Type": "application/json"}
-        logger.info("⚠️interactive_webhook(): 3 ⚠️")
-
-        jira_response = requests.post(jira_webhook_url, data=json.dumps(response_data), headers=headers)
-
-        if jira_response.status_code == 200:
-            logger.info("⚠️jira_response.status_code == 200: ⚠️")
-            jsonify({"responseType": "inChannel", "text": "✅ 응답이 성공적으로 전송되었습니다!"}), 200
-
-            # test_task에 해당하는 Dooray Webhook URL
-            webhook_url = "https://projectg.dooray.com/services/3570973280734982045/4037981561969473608/QljyNHwGREyQJsAFbMFp7Q"
-            
-            # 메시지 페이로드 구성 (간단한 테스트 메시지)
-            payload = {
-                "responseType": "inChannel",
-                "text": "✅ *Dooray Webhook 테스트 메시지 전송 성공!* \n테스트용 메시지입니다.",
-            }
-
-            test_response_data = {
+        test_response_data = {
                 "responseType": "inChannel",
                 "channelId": "테스트용-채널-ID",
                 "triggerId": "테스트용-트리거-ID",
@@ -470,22 +451,16 @@ def interactive_webhook():
                 )
             }
 
-            # webhook_url과 jira_webhook_url 비교
-            
-            if webhook_url == jira_webhook_url:
-                logger.info("🔁 webhook_url과 jira_webhook_url이 동일합니다.")
-            else:
-                logger.info("❗ webhook_url과 jira_webhook_url이 다릅니다.")
-                logger.info(f"   webhook_url: {webhook_url}")
-                logger.info(f"   jira_webhook_url: {jira_webhook_url}")
-            
-            # 요청 전송
-            response = requests.post(jira_webhook_url, data=json.dumps(test_response_data), headers=headers)
-            
-            # 결과 로그 출력
-            logger.info(f"Status Code: {response.status_code}")
-            logger.info(f"Response Body: {response.text}")
 
+        # Dooray 메신저로 응답 보내기
+        headers = {"Content-Type": "application/json"}
+        logger.info("⚠️interactive_webhook(): 3 ⚠️")
+
+        jira_response = requests.post(jira_webhook_url, data=json.dumps(test_response_data), headers=headers)
+
+        if jira_response.status_code == 200:
+            logger.info("⚠️jira_response.status_code == 200: ⚠️")
+            return jsonify({"responseType": "inChannel", "text": "✅ 응답이 성공적으로 전송되었습니다!"}), 200
         
         else:
             logger.error("❌ 메시지 전송 실패: %s", jira_response.text)
