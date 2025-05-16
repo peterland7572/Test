@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 def get_all_members():
-    logger.info("📥 Dooray 전체 멤버 조회 시작")
+    logger.info(" Dooray 전체 멤버 조회 시작")
 
     base_url = "https://admin-api.dooray.com/admin/v1/members?size=100"
     headers = {
@@ -30,7 +30,7 @@ def get_all_members():
             response = requests.get(paged_url, headers=headers)
             response.raise_for_status()
         except Exception as e:
-            logger.error("❌ 멤버 조회 실패 (page %d): %s", page, str(e))
+            logger.error(" 멤버 조회 실패 (page %d): %s", page, str(e))
             break
 
         result = response.json().get("result", [])
@@ -59,7 +59,7 @@ def get_all_members():
 
         page += 1
 
-    logger.info("👥 전체 멤버 수: %d", len(all_members))
+    logger.info(" 전체 멤버 수: %d", len(all_members))
     return all_members
 
 
@@ -67,7 +67,7 @@ def get_member_id_by_name(name):
     logger.info("🔍 이름으로 멤버 조회 시작: '%s'", name)
 
     members = get_all_members()
-    logger.info("👥 가져온 멤버 수: %d", len(members))
+    logger.info(" 가져온 멤버 수: %d", len(members))
 
     for i, m in enumerate(members):
         m_name = m.get("name")
@@ -76,10 +76,10 @@ def get_member_id_by_name(name):
         logger.debug("🔎 [%d] 이름: '%s', ID: %s", i, m_name, m_id)
 
         if m_name == name:
-            logger.info("✅ 일치하는 멤버 발견: '%s' (id=%s)", m_name, m_id)
+            logger.info(" 일치하는 멤버 발견: '%s' (id=%s)", m_name, m_id)
             return m_id
 
-    logger.warning("🚫 이름과 일치하는 멤버를 찾지 못함: '%s'", name)
+    logger.warning(" 이름과 일치하는 멤버를 찾지 못함: '%s'", name)
     return None
 
 
@@ -102,33 +102,33 @@ def get_member_name_by_id(member_id: str) -> str:
     }
 
     logger.info("🔍 get_member_name_by_id(): 시작 - member_id=%s", member_id)
-    logger.info("🌐 요청 URL: %s", api_url)
-    logger.info("📡 요청 헤더: %s", headers)
+    logger.info("요청 URL: %s", api_url)
+    logger.info("요청 헤더: %s", headers)
 
     try:
         response = requests.get(api_url, headers=headers)
-        logger.info("📥 응답 상태 코드: %s", response.status_code)
-        logger.debug("📄 응답 바디 (raw): %s", response.text)
+        logger.info("응답 상태 코드: %s", response.status_code)
+        logger.debug("응답 바디 (raw): %s", response.text)
 
         if response.status_code == 200:
             data = response.json()
-            logger.debug("📦 파싱된 JSON: %s", data)
+            logger.debug(" 파싱된 JSON: %s", data)
 
             result = data.get("result")
             if result:
                 name = result.get("name")
                 if name:
-                    logger.info("✅ 이름 추출 성공: %s", name)
+                    logger.info(" 이름 추출 성공: %s", name)
                     return name
                 else:
-                    logger.warning("⚠️ 이름 필드가 존재하지 않음. result=%s", result)
+                    logger.warning(" 이름 필드가 존재하지 않음. result=%s", result)
             else:
-                logger.warning("⚠️ 'result' 키가 응답에 없음. data=%s", data)
+                logger.warning(" 'result' 키가 응답에 없음. data=%s", data)
         else:
-            logger.error("❌ Dooray API 요청 실패. status_code=%s, 응답=%s", response.status_code, response.text)
+            logger.error(" Dooray API 요청 실패. status_code=%s, 응답=%s", response.status_code, response.text)
 
     except Exception as e:
-        logger.exception("❌ 예외 발생: %s", e)
+        logger.exception(" 예외 발생: %s", e)
 
     return "알 수 없음"
 
@@ -164,7 +164,7 @@ def dooray_webhook():
         "/UI일감": "ui_task",
     }
 
-    # ✅ Heartbeat 커맨드 추가
+    #  Heartbeat 커맨드 추가
     if command == "/heartbeat":
         logger.info("💓 Heartbeat 요청 수신됨")
         return jsonify({"status": "alive"}), 200
@@ -221,7 +221,7 @@ def dooray_webhook():
             for member_id, role in member_roles:
                 name = get_member_name_by_id(member_id)
                 if name:
-                    logger.info("👤 이름 조회 결과: member_id=%s, name=%s", member_id, name)
+                    logger.info(" 이름 조회 결과: member_id=%s, name=%s", member_id, name)
                     mentions.append(f"@{name}")
                 else:
                     logger.warning("⚠️ 이름 조회 실패: member_id=%s", member_id)
@@ -257,14 +257,14 @@ def dooray_webhook():
         headers = {"token": cmd_token, "Content-Type": "application/json"}
         response = requests.post(dooray_dialog_url, json=dialog_data, headers=headers)
         if response.status_code == 200:
-            logger.info("✅ 모임요청Dialog 생성 성공")
+            logger.info("모임요청Dialog 생성 성공")
             return jsonify({
                 "responseType": "ephemeral",
                 "text": "모임요청 요청을 위한 창이 열렸습니다!"
             }), 200
 
         else:
-            logger.error("❌ 모임요청 Dialog 생성 실패: %s", response.text)
+            logger.error(" 모임요청 Dialog 생성 실패: %s", response.text)
             return jsonify({
                 "responseType": "ephemeral",
                 "text": "모임요청에 실패했습니다."
@@ -436,7 +436,7 @@ def interactive_webhook():
         headers = {"Content-Type": "application/json"}
         logger.info("⚠️interactive_webhook(): 3 ⚠️")
 
-        jira_response = requests.post(jira_webhook_url, json=response_data, headers=headers)
+        jira_response = requests.post(jira_webhook_url, data=json.dumps(response_data), headers=headers)
 
         if jira_response.status_code == 200:
             logger.info("⚠️jira_response.status_code == 200: ⚠️")
@@ -451,7 +451,7 @@ def interactive_webhook():
 
 @app.route("/interactive-webhook2", methods=["POST"])
 def interactive_webhook2():
-    """Dooray /planning_review 요청을 처리하는 웹훅"""
+    """Dooray /meeting_review 요청을 처리하는 웹훅"""
 
     logger.info("⚠️interactive_webhook2(): 시작 ⚠️")
     data = request.json
@@ -469,13 +469,13 @@ def interactive_webhook2():
     if not submission:
         return jsonify({"responseType": "ephemeral", "text": "⚠️ 입력된 데이터가 없습니다."}), 400
 
-    # ✅ 폼 입력값 처리
+    # 폼 입력값 처리
     title = submission.get("title", "제목 없음")
     content = submission.get("content", "내용 없음")
     document = submission.get("document", "없음")
     assignee_tags = submission.get("assignee", "")  # ex) "@김철수 @박영희/기획팀"
 
-    # ✅ '@이름' 형식 추출 (공백 포함된 이름 전체 추출)
+    # '@이름' 형식 추출 (공백 포함된 이름 전체 추출)
     # mention_pattern = r'@([^\n,@]+)'  # '@조현웅/SGE 품질검증팀' → '조현웅/SGE 품질검증팀'
     # names = re.findall(mention_pattern, assignee_tags)
     mention_pattern = r'@([^\n,@]+)'
@@ -490,7 +490,7 @@ def interactive_webhook2():
         member_id = get_member_id_by_name(name)
         if member_id:
             mention = f"[@{name}](dooray://3570973280734982045/members/{member_id} \"member\")"
-            logger.info("✅ 멘션 생성 완료: %s", mention)
+            logger.info("멘션 생성 완료: %s", mention)
             mentions.append(mention)
         else:
             logger.warning("⚠️ member_id를 찾을 수 없음: %s", name)
@@ -525,7 +525,7 @@ def interactive_webhook2():
         "channelId": channel_id,
         "triggerId": trigger_id,
         "replaceOriginal": "false",
-        "text": f"**[기획 검토 요청]**\n"
+        "text": f"**[기획 리뷰 요청드립니다.]**\n"
                 f"제목: << {title} >>\n"
                 f"기획서: {document if document != '없음' else '없음'}\n"
                 f"내용: {content}\n"
@@ -535,18 +535,21 @@ def interactive_webhook2():
                 f"[@김주현D/SGE PM팀](dooray://3570973279848255571/members/3898983631689925324 \"member\") \n"
         # [@김주현D/SGE PM팀]
     }
+    # 기획서 리뷰방
+    webhook_url = "https://projectg.dooray.com/services/3570973280734982045/4041534465982137794/rHV6ZWAeSuCnMRko9whNWg"
+    # 테스트방(jira-task)
+    # webhook_url = "https://projectg.dooray.com/services/3570973280734982045/4041752041730033522/0MRxm-OGSsuVzsgm0IEI3A"
 
-    webhook_url = "https://projectg.dooray.com/services/3570973280734982045/4037981561969473608/QljyNHwGREyQJsAFbMFp7Q"
     headers = {"Content-Type": "application/json"}
 
     response = requests.post(webhook_url, json=response_data, headers=headers)
 
     if response.status_code == 200:
-        logger.info("✅ 기획 검토 메시지 전송 성공")
-        return jsonify({"responseType": "inChannel", "text": "✅ 기획 검토 요청이 전송되었습니다!"}), 200
+        logger.info("미팅 검토 메시지 전송 성공")
+        return jsonify({"responseType": "inChannel", "text": "미팅 요청이 전송되었습니다!"}), 200
     else:
-        logger.error("❌ 기획 검토 메시지 전송 실패: %s", response.text)
-        return jsonify({"responseType": "ephemeral", "text": "❌ 기획 검토 요청 전송에 실패했습니다."}), 500
+        logger.error("미팅 검토 메시지 전송 실패: %s", response.text)
+        return jsonify({"responseType": "ephemeral", "text": "미팅 요청이 전송에 실패했습니다."}), 500
 
 
 if __name__ == "__main__":
