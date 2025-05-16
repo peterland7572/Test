@@ -434,10 +434,6 @@ def interactive_webhook():
         }
 
         test_response_data = {
-                "responseType": "inChannel",
-                "channelId": "테스트용-채널-ID",
-                "triggerId": "테스트용-트리거-ID",
-                "replaceOriginal": "false",
                 "text": (
                     "[@홍석기C/SGE PM팀](dooray://3570973279848255571/members/3571008351482084031 \"admin\") "
                     "[@노승한/SGE PM팀](dooray://3570973279848255571/members/3571008626725314977 \"admin\") "
