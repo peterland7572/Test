@@ -452,6 +452,24 @@ def interactive_webhook():
                 "text": "✅ *Dooray Webhook 테스트 메시지 전송 성공!* \n테스트용 메시지입니다.",
             }
 
+            test_response_data = {
+                "responseType": "inChannel",
+                "channelId": "테스트용-채널-ID",
+                "triggerId": "테스트용-트리거-ID",
+                "replaceOriginal": "false",
+                "text": (
+                    "[@홍석기C/SGE PM팀](dooray://3570973279848255571/members/3571008351482084031 \"admin\") "
+                    "[@노승한/SGE PM팀](dooray://3570973279848255571/members/3571008626725314977 \"admin\") "
+                    "[@김주현D/SGE PM팀](dooray://3570973279848255571/members/3898983631689925324 \"member\")\n"
+                    "**지라 일감 요청드립니다!**\n"
+                    " 제목: 클라-테스트 제목\n"
+                    " 내용: 테스트 내용입니다.\n"
+                    " 기간: 2025-05-20\n"
+                    " 담당자: 김테스터\n"
+                    " 기획서: https://notion.so/sample-doc"
+                )
+            }
+
             # webhook_url과 jira_webhook_url 비교
             
             if webhook_url == jira_webhook_url:
@@ -462,7 +480,7 @@ def interactive_webhook():
                 logger.info(f"   jira_webhook_url: {jira_webhook_url}")
             
             # 요청 전송
-            response = requests.post(jira_webhook_url, data=json.dumps(payload), headers=headers)
+            response = requests.post(jira_webhook_url, data=json.dumps(test_response_data), headers=headers)
             
             # 결과 로그 출력
             logger.info(f"Status Code: {response.status_code}")
