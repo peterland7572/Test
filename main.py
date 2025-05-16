@@ -418,10 +418,6 @@ def interactive_webhook():
         }.get(callback_id, "")
 
         response_data = {
-            "responseType": "inChannel",
-            "channelId": channel_id,
-            "triggerId": trigger_id,
-            "replaceOriginal": "false",
             "text": f"[@홍석기C/SGE PM팀](dooray://3570973279848255571/members/3571008351482084031 \"admin\") "
                     f"[@노승한/SGE PM팀](dooray://3570973279848255571/members/3571008626725314977 \"admin\") "
                     f"[@김주현D/SGE PM팀](dooray://3570973279848255571/members/3898983631689925324 \"member\") \n"
@@ -433,26 +429,11 @@ def interactive_webhook():
                     f" 기획서: {document if document != '없음' else '없음'}"
         }
 
-        test_response_data = {
-                "text": (
-                    "[@홍석기C/SGE PM팀](dooray://3570973279848255571/members/3571008351482084031 \"admin\") "
-                    "[@노승한/SGE PM팀](dooray://3570973279848255571/members/3571008626725314977 \"admin\") "
-                    "[@김주현D/SGE PM팀](dooray://3570973279848255571/members/3898983631689925324 \"member\")\n"
-                    "**지라 일감 요청드립니다!**\n"
-                    " 제목: 클라-테스트 제목\n"
-                    " 내용: 테스트 내용입니다.\n"
-                    " 기간: 2025-05-20\n"
-                    " 담당자: 김테스터\n"
-                    " 기획서: https://notion.so/sample-doc"
-                )
-            }
-
-
         # Dooray 메신저로 응답 보내기
         headers = {"Content-Type": "application/json"}
         logger.info("⚠️interactive_webhook(): 3 ⚠️")
 
-        jira_response = requests.post(jira_webhook_url, data=json.dumps(test_response_data), headers=headers)
+        jira_response = requests.post(jira_webhook_url, json=response_data, headers=headers)
 
         if jira_response.status_code == 200:
             logger.info("⚠️jira_response.status_code == 200: ⚠️")
