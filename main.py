@@ -441,7 +441,26 @@ def interactive_webhook():
 
         if jira_response.status_code == 200:
             logger.info("⚠️jira_response.status_code == 200: ⚠️")
-            return jsonify({"responseType": "inChannel", "text": "✅ 응답이 성공적으로 전송되었습니다!"}), 200
+            jsonify({"responseType": "inChannel", "text": "✅ 응답이 성공적으로 전송되었습니다!"}), 200
+
+            # test_task에 해당하는 Dooray Webhook URL
+            webhook_url = "https://projectg.dooray.com/services/3570973280734982045/4037981561969473608/QljyNHwGREyQJsAFbMFp7Q"
+            
+            # 메시지 페이로드 구성 (간단한 테스트 메시지)
+            payload = {
+                "responseType": "inChannel",
+                "text": "✅ *Dooray Webhook 테스트 메시지 전송 성공!* \n테스트용 메시지입니다.",
+            }
+            
+            
+            # 요청 전송
+            response = requests.post(webhook_url, data=json.dumps(payload), headers=headers)
+            
+            # 결과 로그 출력
+            logger.info(f"Status Code: {response.status_code}")
+            logger.info(f"Response Body: {response.text}")
+
+        
         else:
             logger.error("❌ 메시지 전송 실패: %s", jira_response.text)
             return jsonify({"responseType": "ephemeral", "text": "❌ 응답 전송에 실패했습니다."}), 500
