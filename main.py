@@ -519,10 +519,6 @@ def interactive_webhook2():
 
     # ✅ 메시지 구성
     response_data = {
-        "responseType": "inChannel",
-        "channelId": channel_id,
-        "triggerId": trigger_id,
-        "replaceOriginal": "false",
         "text": f"**[기획 리뷰 요청드립니다.]**\n"
                 f"제목: << {title} >>\n"
                 f"기획서: {document if document != '없음' else '없음'}\n"
