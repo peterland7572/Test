@@ -1,6 +1,7 @@
 import requests
 import logging
 import re
+import json
 from flask import Flask, request, jsonify
 
 DOORAY_ADMIN_API_URL = "https://admin-api.dooray.com/admin/v1/members"
