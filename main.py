@@ -174,34 +174,12 @@ def dooray_webhook():
     # logger.info("📌 Mapped callbackId: %s", callback_ids[command])
 
     if command in callback_ids:
-        input_text = data.get("text", "").strip()
-        logger.info("🔹 원본 텍스트: %s", input_text)
-
-        # 담당자 텍스트 가공
-        member_roles = extract_member_ids_and_roles(input_text)
-
-        assignee_text = ""
-        if member_roles:
-            mentions = []
-            for member_id, role in member_roles:
-                name = get_member_name_by_id(member_id)
-                if name:
-                    logger.info(" 이름 조회 결과: member_id=%s, name=%s", member_id, name)
-                    mentions.append(f"@{name}")
-                else:
-                    logger.warning("⚠️ 이름 조회 실패: member_id=%s", member_id)
-                    mentions.append(f"[unknown:{member_id}]")
-            assignee_text = " ".join(mentions)
-        else:
-            logger.warning("⚠️ 멘션 포맷 아님 또는 파싱 실패, 그대로 사용")
-            assignee_text = input_text
-
         dialog_data = {
             "token": cmd_token,
             "triggerId": trigger_id,
-            "callbackId": callback_ids[command],
+            "callbackId": callback_ids[command],  # 변경된 callbackId 사용
             "dialog": {
-                "callbackId": callback_ids[command],
+                "callbackId": callback_ids[command],  # 변경된 callbackId 사용
                 "title": "새 업무 등록",
                 "submitLabel": "등록",
                 "elements": [
@@ -209,13 +187,7 @@ def dooray_webhook():
                     {"type": "textarea", "label": "내용", "name": "content", "optional": False},
                     {"type": "text", "label": "기간", "name": "duration", "optional": True},
                     {"type": "text", "label": "기획서 (URL)", "name": "document", "optional": True},
-                    {
-                        "type": "text",
-                        "label": "담당자 (실명)",
-                        "name": "assignee",
-                        "optional": False,
-                        "value": assignee_text  # 추가된 부분
-                    }
+                    {"type": "text", "label": "담당자 (실명)", "name": "assignee", "optional": False}
                 ]
             }
         }
@@ -223,13 +195,17 @@ def dooray_webhook():
         headers = {"token": cmd_token, "Content-Type": "application/json"}
         response = requests.post(dooray_dialog_url, json=dialog_data, headers=headers)
 
+        # logger.info("⚠️⚠️⚠️- dialog_data: %s", dialog_data) #
+        # 최종적으로 설정된 callbackId 값을 다시 확인하는 로그
+        # logger.info("📌 Final dialog_data.callbackId: %s", dialog_data["callbackId"])
+        # logger.info("📌 Final dialog_data.dialog.callbackId: %s", dialog_data["dialog"]["callbackId"])
+
         if response.status_code == 200:
             logger.info(f"✅ Dialog 생성 요청 성공 ({command})")
             return jsonify({"responseType": "ephemeral", "text": "업무 요청이 성공적으로 전송되었습니다!"}), 200
         else:
             logger.error(f"❌ Dialog 생성 요청 실패 ({command}): {response.text}")
             return jsonify({"responseType": "ephemeral", "text": "업무 요청이 전송이 실패했습니다."}), 500
-
 
     elif command == "/모임요청":
         logger.info("/모임요청 진입")
@@ -297,7 +273,7 @@ def dooray_webhook():
 
     elif command == "/jira":
         message_data = {
-            "text": "Jira 작업을 처리 중입니다...!",
+            "text": "📢 Jira 작업을 처리 중입니다...!",
             "channelId": channel_id,
             "triggerId": trigger_id,
             "replaceOriginal": "false",
@@ -422,31 +398,9 @@ def interactive_webhook():
         content = submission.get("content", "내용 없음")
         duration = submission.get("duration", "미정")
         document = submission.get("document", "없음")
-        assignee_tags = submission.get("assignee", "")  # 예: "@홍길동/디자인팀 @김철수/기획팀"
+        assignee = submission.get("assignee", "미정")  # 담당자 추가
 
-        # 멘션 파싱
-        mention_pattern = r'@([^\n,@]+)'
-        names = [name.strip() for name in re.findall(mention_pattern, assignee_tags)]
-
-        # 전체 멤버 목록 불러오기
-        all_members = get_all_members()
-
-        # 이름 → ID 매핑
-        name_to_id = {
-            member.get("name", "").strip(): member.get("id")
-            for member in all_members if member.get("name") and member.get("id")
-        }
-
-        # 멘션 생성
-        mentions = [
-            f"[@{name}](dooray://3570973279848255571/members/{name_to_id[name]} \"member\")"
-            if name in name_to_id else f"@{name} (찾을 수 없음)"
-            for name in names
-        ]
-        assignee_text = "".join(mentions) if mentions else "없음"
-        logger.info("✅ 최종 assignee_text: %s", assignee_text)
-
-        # 제목 접두어 설정
+        # callback_id에 따른 제목 접두어 설정
         title_prefix = {
             "server_task": "서버-",
             "ta_task": "TA-",
@@ -471,10 +425,11 @@ def interactive_webhook():
                     f" 제목: {title_prefix}{title}\n"
                     f" 내용: {content}\n"
                     f" 기간: {duration}\n"
-                    f" 담당자: {assignee_text}\n"
+                    f" 담당자: {assignee}\n"
                     f" 기획서: {document if document != '없음' else '없음'}"
         }
 
+        # Dooray 메신저로 응답 보내기
         headers = {"Content-Type": "application/json"}
         logger.info("⚠️interactive_webhook(): 3 ⚠️")
 
@@ -483,9 +438,13 @@ def interactive_webhook():
         if jira_response.status_code == 200:
             logger.info("⚠️jira_response.status_code == 200: ⚠️")
             return jsonify({"responseType": "inChannel", "text": "✅ 응답이 성공적으로 전송되었습니다!"}), 200
+
         else:
             logger.error("❌ 메시지 전송 실패: %s", jira_response.text)
             return jsonify({"responseType": "ephemeral", "text": "❌ 응답 전송에 실패했습니다."}), 500
+
+    logger.info("⚠️interactive_webhook(): 5 ⚠️")
+    return jsonify({"responseType": "ephemeral", "text": "⚠️ 처리할 수 없는 요청입니다."}), 400
 
 
 @app.route("/interactive-webhook2", methods=["POST"])
