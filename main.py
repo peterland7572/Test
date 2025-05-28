@@ -438,7 +438,7 @@ def interactive_webhook():
         if jira_response.status_code == 200:
             logger.info("⚠️jira_response.status_code == 200: ⚠️")
             return jsonify({"responseType": "inChannel", "text": "✅ 응답이 성공적으로 전송되었습니다!"}), 200
-
+        
         else:
             logger.error("❌ 메시지 전송 실패: %s", jira_response.text)
             return jsonify({"responseType": "ephemeral", "text": "❌ 응답 전송에 실패했습니다."}), 500
@@ -548,3 +548,4 @@ def interactive_webhook2():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
+
