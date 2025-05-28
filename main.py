@@ -454,10 +454,10 @@ def interactive_webhook():
         # 멘션 생성
         mentions = [
             f"[@{name}](dooray://3570973279848255571/members/{name_to_id[name]} \"member\")"
-            if name in name_to_id else f"@{name} (찾을 수 없음)"
+            if name in name_to_id else f"@{name}"
             for name in names
         ]
-        assignee_text = "".join(mentions) if mentions else "없음"
+        assignee_text = "".join(mentions) if mentions else assignee_tags
         logger.info("✅ 최종 assignee_text: %s", assignee_text)
 
         # 제목 접두어 설정
